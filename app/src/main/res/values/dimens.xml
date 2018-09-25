@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_size">16sp</dimen>
+    <dimen name="image_height">28dp</dimen>
+    <dimen name="margin_start">50dp</dimen>
+    <dimen name="margin_standart">16dp</dimen>
+    <dimen name="padding_text">8dp</dimen>
+</resources>

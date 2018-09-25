@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary"
+        android:contentDescription="@string/avatar"
+        app:srcCompat="@drawable/avatarka" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="@dimen/image_height"
+        android:layout_height="@dimen/image_height"
+        android:layout_toRightOf="@id/imageView2"
+        android:layout_marginStart="@dimen/margin_start"
+        android:layout_marginTop="@dimen/margin_standart"
+        android:contentDescription="@string/android"
+        app:srcCompat="@drawable/baseline_android_black_18dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/imageView3"
+        android:layout_toRightOf="@id/imageView3"
+        android:paddingLeft="@dimen/padding_text"
+        android:text="@string/key1"
+        android:textSize="@dimen/text_size"
+        android:layout_centerInParent="true"/>
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="@dimen/image_height"
+        android:layout_height="@dimen/image_height"
+        android:layout_below="@+id/imageView3"
+        android:layout_toRightOf="@id/imageView2"
+        android:layout_marginStart="@dimen/margin_start"
+        android:layout_marginTop="@dimen/margin_standart"
+        android:contentDescription="@string/school"
+        app:srcCompat="@drawable/baseline_school_black_18dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/imageView4"
+        android:layout_toRightOf="@id/imageView4"
+        android:paddingLeft="@dimen/padding_text"
+        android:text="@string/key2"
+        android:textSize="@dimen/text_size" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="@dimen/image_height"
+        android:layout_height="@dimen/image_height"
+        android:layout_below="@+id/imageView4"
+        android:layout_toRightOf="@id/imageView2"
+        android:layout_marginStart="@dimen/margin_start"
+        android:layout_marginTop="@dimen/margin_standart"
+        android:contentDescription="@string/pets"
+        app:srcCompat="@drawable/baseline_pets_black_18dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/imageView5"
+        android:layout_toRightOf="@id/imageView5"
+        android:paddingLeft="@dimen/padding_text"
+        android:text="@string/key3"
+        android:textSize="@dimen/text_size" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView5"
+        android:layout_toRightOf="@id/imageView2"
+        android:layout_marginStart="@dimen/margin_start"
+        android:layout_marginTop="@dimen/margin_standart"
+        android:layout_marginEnd="@dimen/margin_standart"
+        android:text="@string/about" />
+
+    <EditText
+        android:id="@+id/edit_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView4"
+        android:layout_toRightOf="@id/imageView2"
+        android:layout_marginStart="@dimen/margin_start"
+        android:layout_marginTop="@dimen/margin_standart"
+        android:layout_marginEnd="@dimen/margin_standart"
+        android:ems="10"
+        android:hint="@string/message"
+        android:inputType="textPersonName"
+        android:textSize="@dimen/text_size"/>
+
+    <TextView
+        android:id="@+id/send_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/edit_message"
+        android:layout_marginEnd="@dimen/margin_standart"
+        android:layout_marginTop="@dimen/margin_standart"
+        android:text="@string/send_message"
+        android:textColor="@color/Red"
+        android:textSize="@dimen/text_size"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/image_height"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="@dimen/margin_standart"
+        android:gravity="center"
+        android:layout_marginStart="200dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/imageButton1"
+            android:layout_width="@dimen/image_height"
+            android:layout_height="@dimen/image_height"
+            android:background="@android:color/background_light"
+            android:layout_marginRight="@dimen/padding_text"
+            app:srcCompat="@drawable/vk" />
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="@dimen/image_height"
+            android:layout_height="@dimen/image_height"
+            android:layout_marginLeft="@dimen/padding_text"
+            app:srcCompat="@drawable/telegram_2" />
+
+    </LinearLayout>
+
+</RelativeLayout>

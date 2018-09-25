@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Android Academy 2</string>
+    <string name="avatar">My photo</string>
+    <string name="android">Android</string>
+    <string name="school">School</string>
+    <string name="pets">Pets</string>
+    <string name="key1">Student of Android Academy</string>
+    <string name="key2">Student of MPEI</string>
+    <string name="key3">Cat\'s paw</string>
+    <string name="message">Enter a message</string>
+    <string name="send_message">SEND MESSAGE </string>
+    <string name="about">Artem has been studying programming for 7 years. He\'s a 6th year student at MPEI. Goes to lectures in The Android Academy and studying development for Android.</string>
+    <string name="email_adr">mailto:%s</string>
+</resources>
