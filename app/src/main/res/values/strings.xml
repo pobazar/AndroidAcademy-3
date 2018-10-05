@@ -11,4 +11,6 @@
     <string name="send_message">SEND MESSAGE </string>
     <string name="about">Artem has been studying programming for 7 years. He\'s a 6th year student at MPEI. Goes to lectures in The Android Academy and studying development for Android.</string>
     <string name="email_adr">mailto:%s</string>
+    <string name="title_recycler">List news</string>
+    <string name="title_about">About</string>
 </resources>

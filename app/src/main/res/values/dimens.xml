@@ -5,4 +5,8 @@
     <dimen name="margin_start">50dp</dimen>
     <dimen name="margin_standart">16dp</dimen>
     <dimen name="padding_text">8dp</dimen>
+    <dimen name="padding_8">8dp</dimen>
+    <dimen name="padding_4">4dp</dimen>
+    <dimen name="news_item_height">150dp</dimen>
+    <dimen name="image_news_height">100dp</dimen>
 </resources>
