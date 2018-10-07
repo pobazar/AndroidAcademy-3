@@ -15,12 +15,11 @@ public class DataUtils {
 
         List<NewsItem> news = new ArrayList<>();
         news.add(new NewsItem(
-                "Tourist filmed sitting on 5m-long crocodile",
+                "Заголовок",
                 "https://e3.365dm.com/18/09/736x414/skynews-crocodile-australia_4433218.jpg",
                 darwinAwards,
                 createDate(2018, 9, 26, 10, 34),
-                "\"It was dangerous, I know. It is a scary feeling sitting on something that could kill you in a fraction of a "
-                        + "second,\" he says.",
+                "Превью текст",
                 "A Danish tourist has admitted he took his life in his hands by sitting on a large crocodile in Australia.\n\n"
                         + "Niels Jensen, 22, was on safari in a wildlife park east of Darwin in northern Australia when he "
                         + "encountered the predator, estimated to be 4.7m (15ft) long and weighing 653kg (1428 lbs).\n\n"

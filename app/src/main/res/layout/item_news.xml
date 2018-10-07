@@ -6,7 +6,7 @@
     android:layout_height="@dimen/news_item_height"
     android:padding="@dimen/padding_4"
     android:gravity="center_vertical"
->
+    tools:showIn="@layout/activity_news_list">
 
 
     <LinearLayout
@@ -20,49 +20,46 @@
         android:layout_marginBottom="@dimen/padding_8">
 
         <TextView
-            android:id="@+id/preview_text"
+            android:id="@+id/title_news"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:paddingBottom="@dimen/padding_4"
             android:textSize="@dimen/text_size"
             android:textStyle="italic"
-            tools:text="@tools:sample/first_names"
-            android:paddingBottom="@dimen/padding_4"/>
+            tools:text="@tools:sample/first_names" />
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/preview_news"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="@dimen/padding_4"
+            android:paddingBottom="@dimen/padding_4"
             android:textSize="@dimen/text_size"
             android:textStyle="bold"
-            tools:text="@tools:sample/last_names"
-            android:paddingTop="@dimen/padding_4"
-            android:paddingBottom="@dimen/padding_4"/>
+            tools:text="@tools:sample/last_names" />
 
         <TextView
-            android:id="@+id/full_text"
+            android:id="@+id/full_text_news"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="TextView"
-            android:textSize="@dimen/text_size"
-            tools:text="@tools:sample/first_names"
             android:paddingTop="@dimen/padding_4"
-            android:paddingBottom="@dimen/padding_4"/>
+            android:paddingBottom="@dimen/padding_4"
+            android:textSize="@dimen/text_size"
+            tools:text="@tools:sample/first_names" />
 
         <TextView
-            android:id="@+id/date"
+            android:id="@+id/date-news"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="casual"
-            android:text="TextView"
+            android:paddingTop="@dimen/padding_4"
             android:textAllCaps="false"
-            tools:text="@tools:sample/date/ddmmyy"
-            android:paddingTop="@dimen/padding_4"/>
+            tools:text="@tools:sample/date/ddmmyy" />
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/image"
+        android:id="@+id/image_news"
         android:layout_width="@dimen/image_news_height"
         android:layout_height="@dimen/image_news_height"
         android:contentDescription="@null"
