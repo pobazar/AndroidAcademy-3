@@ -23,17 +23,18 @@
             android:id="@+id/title_news"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/padding_4"
+            android:maxLines="1"
             android:textSize="@dimen/text_size"
-            android:textStyle="italic"
+            android:textStyle="bold|italic"
             tools:text="@tools:sample/first_names" />
 
         <TextView
             android:id="@+id/preview_news"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/padding_4"
-            android:paddingBottom="@dimen/padding_4"
+            android:layout_below="@+id/title_news"
+            android:layout_marginTop="4dp"
+            android:maxLines="1"
             android:textSize="@dimen/text_size"
             android:textStyle="bold"
             tools:text="@tools:sample/last_names" />
@@ -41,10 +42,11 @@
         <TextView
             android:id="@+id/full_text_news"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/preview_news"
+            android:layout_marginTop="4dp"
+            android:maxLines="4"
             android:layout_weight="1"
-            android:paddingTop="@dimen/padding_4"
-            android:paddingBottom="@dimen/padding_4"
             android:textSize="@dimen/text_size"
             tools:text="@tools:sample/first_names" />
 
@@ -52,9 +54,12 @@
             android:id="@+id/date-news"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="casual"
-            android:paddingTop="@dimen/padding_4"
+            android:layout_below="@+id/full_text_news"
+            android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:maxLines="1"
             android:textAllCaps="false"
+            android:textStyle="bold"
             tools:text="@tools:sample/date/ddmmyy" />
     </LinearLayout>
 

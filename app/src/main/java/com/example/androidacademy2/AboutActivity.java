@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -64,6 +67,26 @@ public class AboutActivity extends AppCompatActivity {
                 openBrowserActivity(teleg);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item)
+    {
+        switch (item.getItemId()) {
+            case R.id.about_button_menu:
+                startActivity(new Intent(this, AboutActivity.class));
+                return true;
+            case R.id.news_button_menu:
+                startActivity(new Intent(this, NewsListActivity.class));
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void openEmailActivity()
