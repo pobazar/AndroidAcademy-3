@@ -20,7 +20,7 @@
         android:layout_marginBottom="@dimen/padding_8">
 
         <TextView
-            android:id="@+id/title_news"
+            android:id="@+id/name_news"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
@@ -29,10 +29,10 @@
             tools:text="@tools:sample/first_names" />
 
         <TextView
-            android:id="@+id/preview_news"
+            android:id="@+id/title_news"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/title_news"
+            android:layout_below="@+id/name_news"
             android:layout_marginTop="4dp"
             android:maxLines="1"
             android:textSize="@dimen/text_size"
@@ -40,13 +40,13 @@
             tools:text="@tools:sample/last_names" />
 
         <TextView
-            android:id="@+id/full_text_news"
+            android:id="@+id/preview_news"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/preview_news"
+            android:layout_below="@+id/title_news"
             android:layout_marginTop="4dp"
-            android:maxLines="4"
             android:layout_weight="1"
+            android:maxLines="4"
             android:textSize="@dimen/text_size"
             tools:text="@tools:sample/first_names" />
 
@@ -54,7 +54,7 @@
             android:id="@+id/date-news"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/full_text_news"
+            android:layout_below="@+id/preview_news"
             android:layout_marginTop="4dp"
             android:fontFamily="sans-serif-smallcaps"
             android:maxLines="1"

@@ -8,127 +8,110 @@ import java.util.List;
 public class DataUtils {
 
     public static List<NewsItem> generateNews() {
-        final Category darwinAwards = new Category(1, "Darwin Awards");
-        final Category criminal = new Category(2, "Criminal");
-        final Category animals = new Category(3, "Animals");
-        final Category music = new Category(4, "Music");
+        final Category travel = new Category(1, "Путешествия");
+        final Category sport = new Category(2, "Спорт");
+        final Category economic = new Category(3, "Экономика");
+        final Category science = new Category(4, "Наука");
 
         List<NewsItem> news = new ArrayList<>();
         news.add(new NewsItem(
-                "Заголовок",
-                "https://e3.365dm.com/18/09/736x414/skynews-crocodile-australia_4433218.jpg",
-                darwinAwards,
-                createDate(2018, 9, 26, 10, 34),
-                "Превью текст",
-                "A Danish tourist has admitted he took his life in his hands by sitting on a large crocodile in Australia.\n\n"
-                        + "Niels Jensen, 22, was on safari in a wildlife park east of Darwin in northern Australia when he "
-                        + "encountered the predator, estimated to be 4.7m (15ft) long and weighing 653kg (1428 lbs).\n\n"
-                        + "The wildlife management graduate is filmed enticing the large reptile, which had been relocated to the "
-                        + "park after it was caught preying on livestock, with a wallaby carcass."
-                        + "After leaving the bait on the ground and waiting for the crocodile to start eating, he astonishingly "
-                        + "straddled the reptile's back, sitting just behind its rear legs.\n\n"
-                        + "He touched some of the scales on the animal's back, and, after a few moments, rose and walked away.\n\n"
-                        + "But a man out of shot told him to get back and give a thumbs-up, so he approached the animal for a second"
-                        + " time, sat down again, turned towards the camera, smiled and put this thumb in the air.\n\n"
-                        + "Mr Jensen admitted he took life in his hands by sitting on a live crocodile for the first time."
+                "Дальний рубеж",
+                "https://icdn.lenta.ru/images/2018/10/05/13/20181005132054508/preview_da50b060653946ff8c48ed4536507a9d.jpg",
+                travel,
+                createDate(2018, 9, 19, 11, 43),
+                "Они победили суровую природу и дошли до границы России и США",
+                "Российская экспедиция на яхте Liberty добралась до Командорских " +
+                        "островов в Беринговом море — места, где проходит морская граница Российской Федерации и США, " +
+                        "а также международная линия перемены дат. Попасть на Командоры непросто. В единственный населенный пункт на крупнейшем из островов," +
+                        " острове Беринга, — в село Никольское, — летают самолеты, но взлетная полоса на аэродроме грунтовая, и в плохую погоду он закрыт." +
+                        " Причем, как отмечают местные жители, плохая погода там практически всегда.\n" +
+                        "Море в районе островов бурное, часто бывают шторма. Из-за постоянных циклонов и нестабильной погоды путешествие на яхте до Командор — опасная затея." +
+                        " Но все же 250 миль морем в одну сторону показались путешественникам более предпочтительным вариантом, нежели ожидание летной погоды в течение неопределенного времени." +
+                        " Организатор экспедиции Nikon Special Project, фотограф Кирилл Умрихин, рассказал «Ленте.ру»," +
+                        " чем замечателен этот затерянный уголок российской территории у самого обреза карты, и почему ради путешествия на Командоры стоит рискнуть."
         ));
         news.add(new NewsItem(
-                "Police warn daredevil cliff jumpers who are 'risking their lives for likes'",
-                "https://e3.365dm.com/18/09/2048x1152/skynews-cliff-jumping-greg-milam_4433647.jpg",
-                criminal,
+                "Роналду помог «Ювентусу» победить в десятый раз подряд",
+                "https://icdn.lenta.ru/images/2018/10/06/21/20181006211458432/pic_3cd7f7afb27376394be27e077467ae20.jpg",
+                sport,
                 createDate(2018, 9, 25, 12, 45),
-                "Police in Los Angeles say they are spending hundreds of thousands of dollars airlifting cliff jumpers out of "
-                        + "dangerous spots.",
-                "Daredevils attempting dangerous cliff dives in a quest for likes has led to an increase in costly helicopter "
-                        + "airlifts in California, police say.\n\n"
-                        + "As young people pursue the perfect selfie or video for their social media pages, the Los Angeles County "
-                        + "Sheriff's Department says it is spending hundreds of thousands of dollars plucking the injured and "
-                        + "stranded from beauty spot locations. \"People have to understand: people die up in those mountains. "
-                        + "For every rescue you see that we do, there are ones that we don't make. They're dead,\" said Deputy "
-                        + "Stephen Doucette.\n\n"
-                        + "A social media search for locations like Eaton Canyon, Hermit Falls and Malibu Creek Rock Pool reveal "
-                        + "dozens of risky selfie videos. Two men were recently rescued after being injured while being filmed at "
-                        + "Hermit Falls."
+                "Туринский «Ювентус» одержал восьмую победу подряд в серии А, обыграв «Удинезе» со счетом 2:0. ",
+                "Встреча 8-го тура чемпионата Италии прошла в субботу, 6 октября." +
+                        " Оба мяча туринцы забили в первом тайме. Вначале отличился Родриго Бентакур (33-я минута)," +
+                        " второй гол на свой счет записал Криштиану Роналду (37-я минута)." +
+                        " Эта победа стала для «Ювентуса» восьмой подряд во внутреннем первенстве и десятой кряду на старте сезона (две победы клуб одержал в Лиге чемпионов)." +
+                        " «Старая синьора» с 24 очками единолично лидирует в турнирной таблице, опережая ближайшего преследователя — «Наполи» — на 9 очков.\n" +
+                        "\n" +
+                        "Минувшим летом 33-летний Роналду перешел в «Ювентус» из мадридского «Реала» за 100 миллионов евро." +
+                        " Португальский нападающий принял участие во всех восьми матчах чемпионата Италии и провел их от начала до конца." +
+                        " В его активе четыре гола и пять передач. В Лиге чемпионов форвард результативными действиями не отметился, заработав удаление в матче с испанской «Валенсией»."
+
         ));
         news.add(new NewsItem(
-                "Bear saved after getting his head stuck in milk can",
-                "https://e3.365dm.com/18/09/2048x1152/skynews-bear-minnesota_4419111.jpg",
-                animals,
+                "«МегаФон» признан самым быстрым оператором в России",
+                "https://yes-no-maybe.ru/wp-content/uploads/2017/12/megafon_logo_3_jpg_ejw_1280.jpg",
+                economic,
                 createDate(2018, 9, 20, 14, 4),
-                "Firefighters used the Jaws of Life to free the young black bear, a tool which is normally used to extricate car"
-                        + " accident victims.",
-                "A bear has been freed after getting his head stuck in a milk can.\n\n"
-                        + "Firefighters were called to help after a conservation officer encountered the grizzly sight in "
-                        + "Minnesota.\n\n"
-                        + "The young black male bear's head was stuck inside an old 10 gallon (38 litre) milk can.\n\n"
-                        + "At first, rescuers tried to use cooking oil to free the animal. When that didn't work, they drilled three"
-                        + " holes in the milk can so the panting bear could breathe.\n\n"
-                        + "Two hours later, firefighters used the \"Jaws of Life\" - a tool which is normally used to extricate car "
-                        + "accident victims - and a spreader to pry the can off.\n\n"
-                        + "After being released, the seemingly healthy bear ran off into the woods."
+                "«МегаФон» получил награду Ookla Speedtest Awardsкак, как оператора с самой быстрой скоростью загрузки и передачи данных," +
+                        " что подтверждается показателями более 7,9 миллиона" +
+                        " замеров скорости на мобильных устройствах россиян через приложение SpeedTest за первый и второй кварталы 2018 года.",
+                "По данным компании Ookla, «МегаФон» предоставляет самый быстрый мобильный интернет в России: так, средняя скорость скачивания составила 24,68" +
+                        " мегабита в секунду, а средняя скорость загрузки данных — 10,57 мегабит в секунду. Замеры проводились с 1,456 миллиона уникальных устройств.\n" +
+                        "\n" +
+                        "«\"МегаФон\" постоянно работает над улучшением качества связи, развивая собственную сеть. Сегодня мы располагаем самой мощной группировкой" +
+                        " базовых станций в России и остаемся первопроходцами эры быстрого интернета, сохраняя лидерство в 4G и тестируя возможности пятого поколения связи" +
+                        " на актуальных кейсах повседневной жизни», — прокомментировал результаты замеров коммерческий директор «МегаФона» Влад Вольфсон. «Для нас большая " +
+                        "честь получить поистине народную награду, а также огромная ответственность продолжать открывать новые возможности для наших клиентов в мобильном интернете», " +
+                        "— подчеркнул он.\n" +
+                        "\n" +
+                        "Представители мобильного оператора отмечают, что столичные абоненты «МегаФона» могут качать данные со средней скоростью 41,93 мегабита в секунду, " +
+                        "а загружать — с 14,46 мегабит в секунду, что почти в два раза превышает показатели второго по средней скорости оператора. Также представлены результаты " +
+                        "пользовательских замеров в Санкт-Петербурге, " +
+                        "где средняя скорость скачивания для абонентов составила 25,74 мегабита в секунду, а загрузки — 14,46 мегабит в секунду."
         ));
         news.add(new NewsItem(
-                "Nearly $18m of cocaine seized in donated boxes of bananas",
-                "https://e3.365dm.com/18/09/2048x1152/skynews-texas-bananas-drugs_4430760.jpg",
-                criminal,
+                "Обнаружены прилетевшие из другой галактики объекты",
+                "https://icdn.lenta.ru/images/2018/10/04/18/20181004184419580/pic_8f6096a92d07f220ba31f08763b12299.jpg",
+                science,
                 createDate(2018, 9, 18, 4, 4),
-                "Massive quantities of the drug were found in boxes of fruit that had been donated to the Texas Department of "
-                        + "Criminal Justice.",
-                "A huge haul of cocaine was discovered hidden in boxes of bananas donated to the Texas Department of Criminal "
-                        + "Justice.\n\n"
-                        + "Some 45 boxes of bananas from Ports of America in Freeport were given away to the agency because they "
-                        + "were already ripe.\n\n"
-                        + "According to a Facebook post on the TDCJ's page, when two sergeants of the Scott Unit arrived to pick "
-                        + "them up they \"discovered something not quite right\".\n\n"
-                        + "The post explains: \"One of the boxes felt different than the others.\n\n"
-                        + "\"They snipped the straps, pulled free the box, and opened it up.\n\n"
-                        + "\"Inside, under a bundle of bananas, he found another bundle! Inside that? What appeared to be a white "
-                        + "powdery substance.\n\n"
-                        + "\"They immediately notified port authorities and awaited their instruction.\""
-                        + "US Customs arrived and tested the substance, which confirmed the powder was cocaine."
+                "Ученые Лейденского университета (Нидерланды) обнаружили вблизи Млечного Пути звезды, которые, вероятно, образовались в другой галактике. " +
+                        "Статья астрономов опубликована в журнале Monthly Notices of the Royal Astronomical Society.",
+                "Исследователи провели поиск быстро двигающихся объектов среди семи миллионов звезд. Для этого они проанализировали полученные космическим " +
+                        "телескопом Gaia данные о наблюдаемых положениях, параллаксе, собственных движениях и лучевых скоростях звезд. Это позволило определить расстояние " +
+                        "и общее распределение скоростей для всех светил. Ученым удалось выявить звезды, чьи скорости были достаточно велики, чтобы преодолеть" +
+                        " гравитацию Млечного Пути с вероятностью 50 процентов.\n" +
+                        "\n" +
+                        "Из этой выборки исследователи выделили 20 звезд, которые могли преодолеть притяжение галактики с вероятностью 80 процентов." +
+                        " Расчет их орбит показал, что среди них нет звезд, что имели бы сверхвысокие скорости и могли бы прилететь из центра Млечного Пути." +
+                        " Астрономы обнаружили семь звезд, убегающих в сторону от галактического диска. Траектории остальных 13 объектов находились в стороне от галактики," +
+                        " включая орбиты двух самых быстрых звезд (700 километров в секунду). " +
+                        "По мнению ученых, эти светила относятся к популяции внегалактических звезд и могли прилететь из далеких галактик."
         ));
         news.add(new NewsItem(
-                "US government hacker jailed after losing secrets",
-                "https://e3.365dm.com/17/09/736x414/d55722dc4eb37f6959d2e047c14710d586aab99f90aa1e4acfd9f992125294f5_4107038.jpg",
-                criminal,
+                "Лукашенко выпросил у Путина денег",
+                "https://icdn.lenta.ru/images/2018/10/05/16/20181005165529004/pic_008190482d72a3adfe4524cf1d18f352.jpg",
+                economic,
                 createDate(2018, 9, 17, 12, 45),
-                "Nghia Hoang Pho, 68, who developed hacking tools for the National Security Agency, illegally stored material "
-                        + "on his home computer.",
-                "A man who illegally took home hacking tools from his workplace at the National Security Agency, and then "
-                        + "allegedly lost them to Russian intelligence, has been jailed for five years and six months.\n\n"
-                        + "Nghia Hoang Pho, 68, developed hacking tools at the NSA's elite Tailored Access Operations (TAO) unit, "
-                        + "which works on penetrating target computer networks for the US intelligence community.\n\n"
-                        + "While employed by the NSA between 2010 and 2015, Pho took home what prosecutors described as \"massive "
-                        + "troves of highly classified national defence information\" and stored those troves on his home computer "
-                        + "network.\n\n"
-                        + "Reports have alleged that while these tools were stored on his home computer, Pho installed Kaspersky "
-                        + "Lab anti-virus software, which Russian intelligence then used to steal those tools for themselves.\n\n"
-                        + "Although the company has vigorously denied claims its software was used by Russian intelligence to steal"
-                        + " the data, the publicity damage has left Kaspersky Lab working to address customer fears in a global "
-                        + "transparency initiative - including moving a significant portion of its operations from Russia to "
-                        + "Switzerland.\n\n"
-                        + "An internal investigation at the cyber security company into the incident prompted the company to suggest"
-                        + " that an NSA employee had actually been hacked when he downloaded pirate software and disabled "
-                        + "Kaspersky's anti-virus."
-        ));
-        news.add(new NewsItem(
-                "Wet Wet Wet announce Liberty X star Kevin Simm as new frontman",
-                "https://e3.365dm.com/18/09/2048x1152/skynews-wet-wet-wet-kevin-simm_4433314.jpg",
-                music,
-                createDate(2018, 9, 17, 12, 45),
-                "The Voice 2016 winner says he was \"really taken aback\" by the opportunity after singing the band's songs "
-                        + "early in his career.",
-                "The Scottish band, who are best-known for their 1994 cover of The Troggs' 1960s hit Love Is All Around, "
-                        + "revealed the change in line-up on Tuesday.\n\n"
-                        + "Simm, 38, who won The Voice in 2016, will take over singing duties after founding member Marti Pellow "
-                        + "left the band last year.\n\n"
-                        + "Simm, from Lancashire, first shot to fame on ITV talent show Popstars in 2001 after forming the group "
-                        + "Liberty X with four other runner-up contestants.\n\n"
-                        + "He has recalled singing Wet Wet Wet's songs early in his career.He said: \"I was really taken aback, the"
-                        + " opportunity to join a band with such amazing songs and great guys and a great fanbase really "
-                        + "excites me.\n\n"
-                        + "\"When I first started gigging around the pubs and clubs up North, two songs that were always in my set "
-                        + "were Goodnight Girl and Love Is All Around.\""
+                "Белоруссия договорилась с Россией о предоставлении государственного кредита в 2019 году. Об этом заявил премьер-министр страны Сергей Румас.",
+                "«Все будет хорошо. У нас есть понимание с правительством Российской Федерации о предоставлении кредита в 2019 году. Сейчас обсуждается сумма этого кредита»," +
+                        " — отметил Румас.\n" +
+                        "\n" +
+                        "По его словам, Минску нужны деньги для рефинансирования внешнего долга, но Москва пока согласна предоставить новый заем только для выплат по двусторонним " +
+                        "обязательствам. «Белорусская сторона предлагает несколько расширить и попросить Российскую Федерацию рефинансировать платежи, приходящиеся в пользу ЕФСР " +
+                        "[Евразийского фонда стабилизации и развития]», — сказал премьер.\n" +
+                        "\n" +
+                        "22 сентября стало известно, что белорусские власти обратились к России с просьбой о предоставлении кредита. Президент Александр Лукашенко тогда говорил, " +
+                        "что Москва «не отвергла идею» о выделении такого кредита на миллиард долларов.\n" +
+                        "\n" +
+                        "Также Румас отметил, что две страны почти договорились о компенсации, которую Россия предоставит Белоруссии за проведение налогового маневра в нефтяной " +
+                        "отрасли. По действующим договоренностям, Белоруссия беспошлинно закупает 24 миллиона тонн российской нефти. Это топливо обходится дешевле, чем остальным внешним " +
+                        "покупателям, поскольку в его цену не включена экспортная пошлина," +
+                        " уплачиваемая продавцом. Еще шесть миллионов Минск «перетамаживает» — отправляет на экспорт, зачисляя экспортную пошлину в свой бюджет.\n" +
+                        "\n" +
+                        "Принятый летом в России закон о завершении налогового маневра в нефтяной отрасли предполагает постепенную отмену к 2024 году экспортной пошлины с " +
+                        "одновременным повышением на ту же величину налога на добычу полезных ископаемых (НДПИ). Таким образом Белоруссия лишится льготных цен на российскую нефть " +
+                        "и возможности оставлять часть пошлины у себя. Именно для этого, по словам Румаса, белорусскому бюджету нужна компенсация, о размере и форме которой стороны" +
+                        " собираются договориться к концу 2018 года."
         ));
 
         return news;

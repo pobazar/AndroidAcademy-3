@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.request.RequestOptions;
+
 import java.util.List;
 
 
@@ -21,13 +21,15 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
     private final List<NewsItem> newsItemList;
     private final Context context;
     private final LayoutInflater inflater;
+    private final OnItemClickListener clickListener;
     public static final String LOG="My_Log";
 
-    public NewsRecyclerAdapter(Context context, List<NewsItem> news)
+    public NewsRecyclerAdapter(Context context, List<NewsItem> news,  OnItemClickListener clickListener)
     {
         this.newsItemList = news;
         this.context = context;
         inflater = LayoutInflater.from(context);
+        this.clickListener=clickListener;
         Log.d(LOG,"Constructor recycler adapter");
     }
 
@@ -40,9 +42,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        return new ViewHolder(
-                inflater.inflate(R.layout.item_news, parent, false)
-        );
+        return new ViewHolder(inflater.inflate(R.layout.item_news, parent, false), clickListener);
     }
 
     @Override
@@ -51,31 +51,43 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
         NewsItem news = newsItemList.get(position);
 
         // Fill views with our data
+        holder.nameView.setText(news.getCategory().getName());
         holder.titleView.setText(news.getTitle());
         holder.previewView.setText(news.getPreviewText());
-        holder.fulltextView.setText(news.getFullText());
         holder.dateView.setText(news.getPublishDate()+"");
 
         Glide.with(context).load(news.getImageUrl()).into(holder.imageView);
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(NewsItem newsItem);
+    }
 
-    static class ViewHolder extends RecyclerView.ViewHolder
+    class ViewHolder extends RecyclerView.ViewHolder
     {
         public final ImageView imageView;
+        public final TextView nameView;
         public final TextView titleView;
         public final TextView previewView;
-        public final TextView fulltextView;
         public final TextView dateView;
 
 
-        public ViewHolder(View itemView)
+        public ViewHolder(View itemView, @Nullable OnItemClickListener listener)
         {
             super(itemView);
+
+            itemView.setOnClickListener(view ->
+            {
+                int position = getAdapterPosition();
+                if (listener != null && position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(newsItemList.get(position));
+                }
+            });
+
             imageView = itemView.findViewById(R.id.image_news);
+            nameView = itemView.findViewById(R.id.name_news);
             titleView = itemView.findViewById(R.id.title_news);
             previewView = itemView.findViewById(R.id.preview_news);
-            fulltextView = itemView.findViewById(R.id.full_text_news);
             dateView = itemView.findViewById(R.id.date_news);
         }
     }
