@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class AboutActivity extends AppCompatActivity {
 
-    private TextView editMes, butMes;
+    private TextView editMes, butMes ;
     private ImageButton imb1, imb2;
     public String message;
     public static final String LOG="My_Log";
