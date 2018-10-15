@@ -2,18 +2,22 @@ package com.example.androidacademy2;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
-    private TextView editMes, butMes;
+
+public class AboutActivity extends AppCompatActivity {
+
+    private TextView editMes, butMes ;
     private ImageButton imb1, imb2;
     public String message;
     public static final String LOG="My_Log";
@@ -26,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.about_activity);
 
         editMes=findViewById(R.id.edit_message);
         butMes=findViewById(R.id.send_message);
@@ -63,6 +67,26 @@ public class MainActivity extends AppCompatActivity {
                 openBrowserActivity(teleg);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item)
+    {
+        switch (item.getItemId()) {
+            case R.id.about_button_menu:
+                startActivity(new Intent(this, AboutActivity.class));
+                return true;
+            case R.id.news_button_menu:
+                startActivity(new Intent(this, NewsListActivity.class));
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void openEmailActivity()
