@@ -17,8 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 
-public class NewsListActivity extends AppCompatActivity
-{
+public class NewsListActivity extends AppCompatActivity {
 
     private final NewsRecyclerAdapter.OnItemClickListener clickListener = news ->
     {
@@ -26,48 +25,42 @@ public class NewsListActivity extends AppCompatActivity
         newsDetailsActivityIntent.putExtra("name", news.getCategory().getName());
         newsDetailsActivityIntent.putExtra("title", news.getTitle());
         newsDetailsActivityIntent.putExtra("full", news.getFullText());
-        newsDetailsActivityIntent.putExtra("date", news.getPublishDate()+"");
+        newsDetailsActivityIntent.putExtra("date", news.getPublishDate() + "");
         newsDetailsActivityIntent.putExtra("image", news.getImageUrl());
         startActivity(newsDetailsActivityIntent);
     };
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
 
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-        {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             RecyclerView recyclerView = findViewById(R.id.recycler_news);
             recyclerView.setAdapter(new NewsRecyclerAdapter(this, DataUtils.generateNews(), clickListener));
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),1);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), 1);
             recyclerView.addItemDecoration(dividerItemDecoration);
-        }
-        else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-        {
+        } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             RecyclerView recyclerView = findViewById(R.id.recycler_news);
-            recyclerView.setAdapter(new NewsRecyclerAdapter(this, DataUtils.generateNews(),clickListener));
+            recyclerView.setAdapter(new NewsRecyclerAdapter(this, DataUtils.generateNews(), clickListener));
             recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
-            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),1);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), 1);
             recyclerView.addItemDecoration(dividerItemDecoration);
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(@NonNull Menu menu)
-    {
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item)
-    {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.about_button_menu:
                 startActivity(new Intent(this, AboutActivity.class));

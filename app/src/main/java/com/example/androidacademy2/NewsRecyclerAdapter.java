@@ -65,14 +65,14 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
 
     class ViewHolder extends RecyclerView.ViewHolder
     {
-        public final ImageView imageView;
-        public final TextView nameView;
-        public final TextView titleView;
-        public final TextView previewView;
-        public final TextView dateView;
+        private final ImageView imageView;
+        private final TextView nameView;
+        private final TextView titleView;
+        private final TextView previewView;
+        private final TextView dateView;
 
 
-        public ViewHolder(View itemView, @Nullable OnItemClickListener listener)
+        private ViewHolder(View itemView, @Nullable OnItemClickListener listener)
         {
             super(itemView);
 
