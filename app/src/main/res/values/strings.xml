@@ -16,4 +16,5 @@
     <string name="menu_about">About</string>
     <string name="menu_news">News</string>
     <string name="image_news">Image news</string>
+    <string name="title_load">Load news</string>
 </resources>

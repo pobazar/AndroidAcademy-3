@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-public class DataUtils {
+public class DataUtils  {
 
     public static List<NewsItem> generateNews() {
         final Category travel = new Category(1, "Путешествия");
