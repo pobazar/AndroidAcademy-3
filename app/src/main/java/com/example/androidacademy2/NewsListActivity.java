@@ -13,8 +13,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -55,31 +59,13 @@ public class NewsListActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.recycler_news);
 
-        asyncTask = new LoadNews(this);
-        asyncTask.execute(1000L);
-        try {
-            news = asyncTask.get();
-            recyclerView.setVisibility(View.VISIBLE);
-
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                recyclerView.setAdapter(new NewsRecyclerAdapter(this, news, clickListener));
-                recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-                DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), 1);
-                recyclerView.addItemDecoration(dividerItemDecoration);
-            } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                recyclerView.setAdapter(new NewsRecyclerAdapter(this, news, clickListener));
-                recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-
-                DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), 1);
-                recyclerView.addItemDecoration(dividerItemDecoration);
-            }
-        } catch (InterruptedException e) {
+        asyncTask = new LoadNews(this, clickListener);
+        asyncTask.execute(5000L);
+       /* try {
+            news = asyncTask.get(2, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
             e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
+        }*/
     }
 
     @Override
