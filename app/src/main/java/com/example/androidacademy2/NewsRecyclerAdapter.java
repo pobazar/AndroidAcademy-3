@@ -51,7 +51,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
         NewsItem news = newsItemList.get(position);
 
         // Fill views with our data
-        holder.nameView.setText(news.getCategory().getName());
+        holder.nameView.setText(news.getCategory());
         holder.titleView.setText(news.getTitle());
         holder.previewView.setText(news.getPreviewText());
         holder.dateView.setText(news.getPublishDate()+"");

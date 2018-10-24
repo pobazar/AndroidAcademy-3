@@ -8,10 +8,10 @@ import java.util.List;
 public class DataUtils  {
 
     public static List<NewsItem> generateNews() {
-        final Category travel = new Category(1, "Путешествия");
-        final Category sport = new Category(2, "Спорт");
-        final Category economic = new Category(3, "Экономика");
-        final Category science = new Category(4, "Наука");
+        final String travel = "Путешествия";
+        final String sport =  "Спорт";
+        final String economic =  "Экономика";
+        final String science = "Наука";
 
         List<NewsItem> news = new ArrayList<>();
         news.add(new NewsItem(
@@ -117,7 +117,10 @@ public class DataUtils  {
         return news;
     }
 
-    private static Date createDate(int year, int month, int date, int hrs, int min) {
+   /* private static Date createDate(int year, int month, int date, int hrs, int min) {
         return new GregorianCalendar(year, month - 1, date, hrs, min).getTime();
-    }
+    }*/
+   private static String createDate(int year, int month, int date, int hrs, int min) {
+       return date+"."+month+"."+year+ " "+hrs+":"+min;
+   }
 }

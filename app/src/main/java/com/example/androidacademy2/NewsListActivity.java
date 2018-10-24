@@ -32,13 +32,14 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 public class NewsListActivity extends AppCompatActivity {
     @Nullable
     private AsyncTask<Long, Void, List<NewsItem>> asyncTask;
+    public static final String LOG="My_Log";
 
     public List<NewsItem> news;
 
     private final NewsRecyclerAdapter.OnItemClickListener clickListener = news ->
     {
         Intent newsDetailsActivityIntent = new Intent(this, NewsDetailsActivity.class);
-        newsDetailsActivityIntent.putExtra("name", news.getCategory().getName());
+        newsDetailsActivityIntent.putExtra("name", news.getCategory());
         newsDetailsActivityIntent.putExtra("title", news.getTitle());
         newsDetailsActivityIntent.putExtra("full", news.getFullText());
         newsDetailsActivityIntent.putExtra("date", news.getPublishDate() + "");
@@ -60,7 +61,7 @@ public class NewsListActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_news);
 
         asyncTask = new LoadNews(this, clickListener);
-        asyncTask.execute(5000L);
+        asyncTask.execute(500L);
        /* try {
             news = asyncTask.get(2, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {

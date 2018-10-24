@@ -1,16 +1,10 @@
 package com.example.androidacademy2;
 
 public class Category {
-    private final int id;
     private final String name;
 
-    public Category(int id, String name) {
-        this.id = id;
+    public Category(String name) {
         this.name = name;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getName() {
