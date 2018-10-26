@@ -1,13 +1,17 @@
 package com.example.androidacademy2;
 
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -22,6 +26,7 @@ import java.util.concurrent.TimeoutException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,7 +37,12 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 public class NewsListActivity extends AppCompatActivity {
     @Nullable
     private AsyncTask<Long, Void, List<NewsItem>> asyncTask;
-    public static final String LOG="My_Log";
+    public static final String LOG = "My_Log";
+    Button tryButton, categoryButton;
+    TextView text;
+    RecyclerView recyclerView;
+    ProgressBar progressBar;
+    String category;
 
     public List<NewsItem> news;
 
@@ -52,21 +62,65 @@ public class NewsListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
+        tryButton = findViewById(R.id.button_try_again);
+        categoryButton = findViewById(R.id.button_category);
+        tryButton.setOnClickListener(v -> {
+            Log.d(LOG, "Try connect");
+            visibleProgress();
+            abc(clickListener);
+
+        });
+
+        categoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder;
+                final String[] categories = {"home", "world", "opinion", "national", "politics", "upshot", "nyregion", "business", "technology", "science", "health", "sports", "arts", "books", "movies",
+                        "theater", "sundayreview", "fashion", "tmagazine", "food", "travel", "magazine", "realestate", "automobiles", "obituaries", "insider"};
+                builder = new AlertDialog.Builder(NewsListActivity.this);
+                builder.setTitle("Choose category").setCancelable(false)
+                        // добавляем переключатели
+                        .setSingleChoiceItems(categories, -1,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int item) {
+                                        category = categories[item];
+                                        categoryButton.setText(category);
+                                        dialog.cancel();
+                                        Log.d(LOG, "Change category");
+                                        visibleProgress();
+                                        abc(clickListener);
+                                    }
+                                });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        });
+
+        text = findViewById(R.id.text_complete);
+        recyclerView = findViewById(R.id.recycler_news);
+        progressBar = findViewById(R.id.progressBar_news);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        RecyclerView recyclerView = findViewById(R.id.recycler_news);
-
-        asyncTask = new LoadNews(this, clickListener);
-        asyncTask.execute(500L);
+        Log.d(LOG, "Application start");
+        category = "food";
+        categoryButton.setText(category);
+        asyncTask = new LoadNews(this, clickListener, category);
+        asyncTask.execute(2000L);
        /* try {
             news = asyncTask.get(2, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             e.printStackTrace();
         }*/
+    }
+
+    public void abc(NewsRecyclerAdapter.OnItemClickListener click) {
+        asyncTask = new LoadNews(this, click, category);
+        asyncTask.execute(2000L);
     }
 
     @Override
@@ -95,5 +149,15 @@ public class NewsListActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void visibleProgress() {
+        text.setVisibility(View.GONE);
+        categoryButton.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        tryButton.setVisibility(View.GONE);
+        categoryButton.setEnabled(false);
+        tryButton.setEnabled(false);
     }
 }

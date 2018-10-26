@@ -17,4 +17,7 @@
     <string name="menu_news">News</string>
     <string name="image_news">Image news</string>
     <string name="load_complete">Download complete</string>
+    <string name="try_again">Try again</string>
+    <string name="connection_failed">Connection is failed</string>
+    <string name="food">Food</string>
 </resources>
