@@ -1,4 +1,4 @@
-package com.example.androidacademy2;
+package com.example.androidacademy2.news;
 
 import android.content.Context;
 import android.util.Log;
@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.example.androidacademy2.R;
+import com.example.androidacademy2.data_news.NewsItem;
 
 import java.util.List;
 

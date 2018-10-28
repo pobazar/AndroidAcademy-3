@@ -1,10 +1,8 @@
-package com.example.androidacademy2;
+package com.example.androidacademy2.news;
 
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,26 +10,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.json.JSONException;
+import com.example.androidacademy2.AboutActivity;
+import com.example.androidacademy2.LoadNews;
+import com.example.androidacademy2.R;
+import com.example.androidacademy2.data_news.NewsItem;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 
 public class NewsListActivity extends AppCompatActivity {
@@ -98,14 +91,14 @@ public class NewsListActivity extends AppCompatActivity {
         text = findViewById(R.id.text_complete);
         recyclerView = findViewById(R.id.recycler_news);
         progressBar = findViewById(R.id.progressBar_news);
+        category = "food";
+        categoryButton.setText(category);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         Log.d(LOG, "Application start");
-        category = "food";
-        categoryButton.setText(category);
         asyncTask = new LoadNews(this, clickListener, category);
         asyncTask.execute(2000L);
        /* try {

@@ -1,4 +1,4 @@
-package com.example.androidacademy2;
+package com.example.androidacademy2.data_news;
 
 import java.util.Date;
 

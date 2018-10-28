@@ -1,7 +1,6 @@
 package com.example.androidacademy2;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -13,6 +12,8 @@ import android.widget.TextView;
 import com.example.androidacademy2.DTO.MultimediaDTO;
 import com.example.androidacademy2.DTO.NewsDTO;
 import com.example.androidacademy2.DTO.NewsResponse;
+import com.example.androidacademy2.data_news.NewsItem;
+import com.example.androidacademy2.news.NewsRecyclerAdapter;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -21,8 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.VectorEnabledTintResources;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,7 +52,7 @@ public class LoadNews extends AsyncTask<Long, Void, List<NewsItem>> {
     //private Call<List<NewsDTO>> searchRequest;
 
 
-    LoadNews(Activity activity, NewsRecyclerAdapter.OnItemClickListener clk, String category) {
+    public LoadNews(Activity activity, NewsRecyclerAdapter.OnItemClickListener clk, String category) {
         Log.d(LOG, "async start");
         activityRef = new WeakReference<>(activity);
         clickListener = clk;

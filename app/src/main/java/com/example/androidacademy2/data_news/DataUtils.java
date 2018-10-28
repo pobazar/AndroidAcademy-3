@@ -1,8 +1,6 @@
-package com.example.androidacademy2;
+package com.example.androidacademy2.data_news;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 public class DataUtils  {

@@ -1,4 +1,4 @@
-package com.example.androidacademy2;
+package com.example.androidacademy2.data_news;
 
 public class Category {
     private final String name;

@@ -1,4 +1,4 @@
-package com.example.androidacademy2;
+package com.example.androidacademy2.news;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.androidacademy2.R;
 
 public class NewsDetailsActivity extends AppCompatActivity {
 
@@ -27,7 +28,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
         setTitle(name);
 
-        webView = (WebView) findViewById (R.id.web_news);
+        webView = findViewById (R.id.web_news);
 
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
