@@ -3,34 +3,36 @@ package com.example.androidacademy2;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-public class NewsDetailsActivity extends AppCompatActivity
-{
+public class NewsDetailsActivity extends AppCompatActivity {
 
-    TextView title, full, date;
-    ImageView image;
+
+    String url, name;
+    WebView webView;
+    private static final String LOG = "My_Log";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_details);
+        url = getIntent().getStringExtra("url");
+        name = getIntent().getStringExtra("name");
 
+        setTitle(name);
 
-        title=findViewById(R.id.title_news_details);
-        full=findViewById(R.id.full_news_details);
-        date=findViewById(R.id.date_news_details);
-        image=findViewById(R.id.image_news_details);
+        webView = (WebView) findViewById (R.id.web_news);
 
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
 
-        setTitle(getIntent().getStringExtra("name"));
-        title.setText(getIntent().getStringExtra("title"));
-        full.setText(getIntent().getStringExtra("full"));
-        date.setText(getIntent().getStringExtra("date"));
-        Glide.with(this).load(getIntent().getStringExtra("image")).into(image);
+        webView.loadUrl(url);
+
     }
 }

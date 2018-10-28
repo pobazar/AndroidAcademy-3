@@ -49,11 +49,8 @@ public class NewsListActivity extends AppCompatActivity {
     private final NewsRecyclerAdapter.OnItemClickListener clickListener = news ->
     {
         Intent newsDetailsActivityIntent = new Intent(this, NewsDetailsActivity.class);
-        newsDetailsActivityIntent.putExtra("name", news.getCategory());
-        newsDetailsActivityIntent.putExtra("title", news.getTitle());
-        newsDetailsActivityIntent.putExtra("full", news.getFullText());
-        newsDetailsActivityIntent.putExtra("date", news.getPublishDate() + "");
-        newsDetailsActivityIntent.putExtra("image", news.getImageUrl());
+        newsDetailsActivityIntent.putExtra("url", news.getUrl());
+        newsDetailsActivityIntent.putExtra("name", news.getTitle());
         startActivity(newsDetailsActivityIntent);
     };
 

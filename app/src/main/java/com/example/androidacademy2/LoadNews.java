@@ -150,7 +150,7 @@ public class LoadNews extends AsyncTask<Long, Void, List<NewsItem>> {
                 }
             }
 
-            news.add(new NewsItem(x.getTitle(), image, x.getSection(), x.getPublishedDate().replace('T', ' '), x.getAbstract1(), ""));
+            news.add(new NewsItem(x.getTitle(), image, x.getSection(), x.getPublishedDate().replace('T', ' '), x.getAbstract1(), "", x.getUrl()));
         }
 
         return news;
