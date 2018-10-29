@@ -1,4 +1,4 @@
-package com.example.androidacademy2;
+package com.example.androidacademy2.Net;
 
 import java.io.IOException;
 
