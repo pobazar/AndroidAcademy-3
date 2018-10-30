@@ -112,14 +112,10 @@ public class NewsListActivity extends AppCompatActivity {
     public void loadItems() {
         Log.d(LOG, "start rx load news");
         visibleProgress();
-      /*  disposable = io.reactivex.Observable.just(LoadNews.downloadNews(category))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::showNews, this::visibleError);*/
         final Disposable searchDisposable = Network.getInstance()
                 .news()
-                // .search(category)
-                .search()
+                .search(category)
+                //.search()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::showNews, this::visibleError);
@@ -127,18 +123,14 @@ public class NewsListActivity extends AppCompatActivity {
         compositeDisposable.add(searchDisposable);
     }
 
-    public void showNews(@NonNull Response<List<NewsDTO>> response) {
+    public void showNews(@NonNull NewsResponse response) {
         visibleRecycler();
-        Gson gson = new Gson();
-        String gsonResponse = response.body() + "";
-        NewsResponse newsResponse = gson.fromJson(gsonResponse, NewsResponse.class);
-        List<NewsDTO> newsdto = newsResponse.getData();
+        //Gson gson = new Gson();
+       // String gsonResponse = response.body()+"";
+        //NewsResponse newsResponse = gson.fromJson(gsonResponse, NewsResponse.class);
+        List<NewsDTO> newsdto = response.getData();
         news = dtotonews(newsdto);
-        try {
-            Thread.sleep(1000L);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             recyclerView.setAdapter(new NewsRecyclerAdapter(this, news, clickListener));
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
