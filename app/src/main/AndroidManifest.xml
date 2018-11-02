@@ -28,7 +28,9 @@
         <activity
             android:name=".news.NewsDetailsActivity"
             android:label="@string/title_recycler" />
-        <activity android:name=".news.NewsListActivity" />
+        <activity android:name=".news.NewsListActivity"
+            android:label="@string/nytimes"/>
+        <activity android:name=".news.NewsDetailsActivityEdit" />
 
     </application>
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".news.NewsDetailsActivity">
+    tools:context=".news.NewsDetailsActivityEdit">
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -27,7 +27,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/image_news_details"
+                android:id="@+id/image_news_details_edit"
                 android:layout_width="300dp"
                 android:layout_height="@dimen/news_item_height"
                 android:layout_marginStart="16dp"
@@ -39,8 +39,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/avatars" />
 
-            <TextView
-                android:id="@+id/date_news_details"
+            <EditText
+                android:id="@+id/date_news_details_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -50,8 +50,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title_news_details" />
 
-            <TextView
-                android:id="@+id/title_news_details"
+            <EditText
+                android:id="@+id/title_news_details_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -61,12 +61,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/image_news_details" />
 
-            <TextView
-                android:id="@+id/full_news_details"
+            <EditText
+                android:id="@+id/full_news_details_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/date_news_details" />

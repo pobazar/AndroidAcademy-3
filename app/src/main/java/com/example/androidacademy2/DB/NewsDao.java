@@ -7,6 +7,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 
@@ -15,7 +16,7 @@ import io.reactivex.Observable;
 public interface NewsDao {
 
 
-    @Query("SELECt * FROM newsTable")
+    @Query("SELECT * FROM newsTable")
     Observable<List<NewsEntity>> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -23,6 +24,9 @@ public interface NewsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(NewsEntity news);
+
+    @Query("UPDATE newsTable SET title = :x, previewText = :y, publishDate =:z WHERE url = :id")
+    void updateById(String id, String x, String y, String z);
 
     @Delete
     void delete(NewsEntity news);

@@ -43,15 +43,10 @@ public class NewsDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_details);
         url = getIntent().getStringExtra("url");
-        Log.d(LOG,url);
+        Log.d(LOG, url);
 
         db = AppDatabase.getAppDatabase(this);
 
-        Disposable2 = db.newsDao().findById(url)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::showNewsDetails, this::logError);
-        compositeDisposable.add(Disposable2);
 
         /*webView = findViewById (R.id.web_news);
         WebSettings webSettings = webView.getSettings();
@@ -59,29 +54,37 @@ public class NewsDetailsActivity extends AppCompatActivity {
         webView.loadUrl(url);*/
     }
 
-    private void showNewsDetails(NewsEntity news)
-    {
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Disposable2 = db.newsDao().findById(url)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::showNewsDetails, this::logError);
+        compositeDisposable.add(Disposable2);
+    }
+
+    private void showNewsDetails(NewsEntity news) {
         titleText = findViewById(R.id.title_news_details);
         fullText = findViewById(R.id.full_news_details);
         publisheDate = findViewById(R.id.date_news_details);
         image = findViewById(R.id.image_news_details);
 
         titleText.setText(news.getTitle());
-        fullText.setText(news.getFullText());
+        fullText.setText(news.getPreviewText());
         publisheDate.setText(news.getPublishDate());
         Glide.with(this).load(news.getImageUrl()).into(image);
-        setTitle(news.getTitle());
+        setTitle(news.getCategory());
     }
 
-    private void logError(Throwable th)
-    {
-        Log.d(LOG,""+th);
+    private void logError(Throwable th) {
+        Log.d(LOG, "" + th);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        compositeDisposable.dispose();
+        // compositeDisposable.dispose();
     }
 
     @Override
@@ -94,7 +97,9 @@ public class NewsDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.edit_button_menu:
-               // startActivity(new Intent(this, AboutActivity.class));
+                Intent newsDetailsActivityIntent = new Intent(this, NewsDetailsActivityEdit.class);
+                newsDetailsActivityIntent.putExtra("url", url);
+                startActivity(newsDetailsActivityIntent);
                 return true;
             case R.id.delete_button_menu:
                 final Disposable Disposable = deleteNews()
@@ -112,7 +117,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
     public Completable deleteNews() {
         return Completable.fromCallable((Callable<Void>) () -> {
             db.newsDao().deleteById(url);
-            Log.d(LOG,"1 news delete");
+            Log.d(LOG, "1 news delete");
             return null;
         });
     }

@@ -24,4 +24,6 @@
     <string name="news">News</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="nytimes">NY Times</string>
+    <string name="save">Save</string>
 </resources>
