@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -67,7 +68,6 @@ public class NewsListActivity extends AppCompatActivity {
     {
         Intent newsDetailsActivityIntent = new Intent(this, NewsDetailsActivity.class);
         newsDetailsActivityIntent.putExtra("url", news.getUrl());
-        newsDetailsActivityIntent.putExtra("name", news.getTitle());
         startActivity(newsDetailsActivityIntent);
     };
 
@@ -98,7 +98,12 @@ public class NewsListActivity extends AppCompatActivity {
                                 Log.d(LOG, "Change category");
                                 //visibleProgress();
                                 //loadItems();
+                                final Disposable Disposable =  deleteNews()
+                                        .subscribeOn(Schedulers.computation())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe();
 
+                                compositeDisposable.add(Disposable);
 
                             });
             AlertDialog alert = builder.create();
@@ -124,6 +129,12 @@ public class NewsListActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Log.d(LOG, "Application start");
+        final Disposable Disposable =  deleteNews()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+
+        compositeDisposable.add(Disposable);
         //loadItems();
     }
 
@@ -168,7 +179,7 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     public void completeLoad(NewsEntity[] newsEntities) {
-        Log.d(LOG, "download "+newsEntities.length+" news");
+        Log.d(LOG, "download " + newsEntities.length + " news");
     }
 
     public void saveNews(NewsEntity[] newsEntities) {
@@ -187,21 +198,17 @@ public class NewsListActivity extends AppCompatActivity {
         return db.newsDao().loadAllByCategory(cat);
     }
 
-    public Completable deleteNews()
-    {
-        db.newsDao().deleteAll();
-        return Completable.complete();
+    public Completable deleteNews() {
+        return Completable.fromCallable((Callable<Void>) () -> {
+            db.newsDao().deleteAll();
+            Log.d(LOG, "rows delete");
+            return null;
+        });
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-     /*   final Disposable Disposable =  deleteNews()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
-
-        compositeDisposable.add(Disposable);*/
         compositeDisposable.dispose();
     }
 
@@ -303,7 +310,7 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     private List<NewsItem> daoToNews(List<NewsEntity> newsEntities) {
-        Log.d(LOG, "get "+newsEntities.size()+" news");
+        Log.d(LOG, "get " + newsEntities.size() + " news");
         List<NewsItem> news = new ArrayList<>();
         for (NewsEntity x : newsEntities) {
             news.add(new NewsItem(x.getTitle(), x.getImageUrl(), x.getCategory(), x.getPublishDate(), x.getPreviewText(), x.getFullText(), x.getUrl()));

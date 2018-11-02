@@ -30,10 +30,10 @@ public interface NewsDao {
     void deleteAll();
 
     @Query("SELECT * FROM newsTable WHERE title = :title LIMIT 1")
-    NewsEntity findByName(String title);
+    Observable<NewsEntity> findByName(String title);
 
     @Query("SELECT * FROM newsTable WHERE url = :id LIMIT 1")
-    NewsEntity findById(String id);
+    Observable<NewsEntity> findById(String id);
 
     @Query("SELECT * FROM newsTable WHERE category = :cat")
     Observable<List<NewsEntity>> loadAllByCategory(String cat);
