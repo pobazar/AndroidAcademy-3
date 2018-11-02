@@ -26,7 +26,7 @@ public class IntroActivity extends AppCompatActivity {
 
         count = loadCounter();
         count++;
-        Log.d(LOG, "Count = "+count);
+       // Log.d(LOG, "Count = "+count);
         saveCounter(count);
         if (count % 2 == 1) {
             setContentView(R.layout.intro_activity);

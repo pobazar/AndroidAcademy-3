@@ -7,6 +7,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.Observable;
 
 
 @Dao
@@ -14,7 +15,7 @@ public interface NewsDao {
 
 
     @Query("SELECt * FROM newsTable")
-    List<NewsEntity> getAll();
+    Observable<List<NewsEntity>> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(NewsEntity... newss);
@@ -35,6 +36,6 @@ public interface NewsDao {
     NewsEntity findById(String id);
 
     @Query("SELECT * FROM newsTable WHERE category = :cat")
-    List<NewsEntity> loadAllByCategory(String cat);
+    Observable<List<NewsEntity>> loadAllByCategory(String cat);
 
 }

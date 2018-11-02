@@ -37,11 +37,12 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import io.reactivex.Completable;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Response;
 
 
 public class NewsListActivity extends AppCompatActivity {
@@ -97,6 +98,8 @@ public class NewsListActivity extends AppCompatActivity {
                                 Log.d(LOG, "Change category");
                                 //visibleProgress();
                                 //loadItems();
+
+
                             });
             AlertDialog alert = builder.create();
             alert.show();
@@ -114,6 +117,7 @@ public class NewsListActivity extends AppCompatActivity {
         categoryButton.setText(category);
 
         db = AppDatabase.getAppDatabase(this);
+        updateNews();
     }
 
     @Override
@@ -132,19 +136,22 @@ public class NewsListActivity extends AppCompatActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation())
                 .map(this::dtoResponseToDao)
-               // .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::saveNews, this::visibleError);
-        Log.d(LOG, "rx load news canel");
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::completeLoad, this::visibleError);
         compositeDisposable.add(searchDisposable);
+    }
+
+    public void updateNews() {
+        final Disposable newsRoomDisposable = getNews()
+                .map(this::daoToNews)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::showNews, this::visibleError);
+        compositeDisposable.add(newsRoomDisposable);
     }
 
     public void showNews(List<NewsItem> news) {
         visibleRecycler();
-        //Gson gson = new Gson();
-        // String gsonResponse = response.body()+"";
-        //NewsResponse newsResponse = gson.fromJson(gsonResponse, NewsResponse.class);
-        //List<NewsDTO> newsdto = response.getData();
-
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             recyclerView.setAdapter(new NewsRecyclerAdapter(this, news, clickListener));
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -160,22 +167,41 @@ public class NewsListActivity extends AppCompatActivity {
         }
     }
 
-    public void saveNews(NewsEntity[] newsEntities)
-    {
-            db.newsDao().deleteAll();
-            db.newsDao().insertAll(newsEntities);
-        Log.d(LOG, "save news to DB complete");
+    public void completeLoad(NewsEntity[] newsEntities) {
+        Log.d(LOG, "download "+newsEntities.length+" news");
     }
 
-    public List<NewsEntity> getNews()
-    {
+    public void saveNews(NewsEntity[] newsEntities) {
+        db.newsDao().deleteAll();
+        db.newsDao().insertAll(newsEntities);
+        Log.d(LOG, "save " + newsEntities.length + " news to DB");
+    }
+
+    public Observable<List<NewsEntity>> getNews() {
         db = AppDatabase.getAppDatabase(this);
         return db.newsDao().getAll();
+    }
+
+    public Observable<List<NewsEntity>> getNews(String cat) {
+        db = AppDatabase.getAppDatabase(this);
+        return db.newsDao().loadAllByCategory(cat);
+    }
+
+    public Completable deleteNews()
+    {
+        db.newsDao().deleteAll();
+        return Completable.complete();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+     /*   final Disposable Disposable =  deleteNews()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+
+        compositeDisposable.add(Disposable);*/
         compositeDisposable.dispose();
     }
 
@@ -245,6 +271,11 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     private NewsEntity[] dtoResponseToDao(@NonNull NewsResponse response) {
+        //Gson gson = new Gson();
+        // String gsonResponse = response.body()+"";
+        //NewsResponse newsResponse = gson.fromJson(gsonResponse, NewsResponse.class);
+        //List<NewsDTO> newsdto = response.getData();
+
         List<NewsDTO> listdto = response.getData();
         NewsEntity[] news = new NewsEntity[listdto.size()];
         int i = 0;
@@ -267,10 +298,12 @@ public class NewsListActivity extends AppCompatActivity {
             news[i] = nn;
             i++;
         }
+        saveNews(news);
         return news;
     }
 
     private List<NewsItem> daoToNews(List<NewsEntity> newsEntities) {
+        Log.d(LOG, "get "+newsEntities.size()+" news");
         List<NewsItem> news = new ArrayList<>();
         for (NewsEntity x : newsEntities) {
             news.add(new NewsItem(x.getTitle(), x.getImageUrl(), x.getCategory(), x.getPublishDate(), x.getPreviewText(), x.getFullText(), x.getUrl()));
@@ -279,9 +312,9 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     private int checkitem(String s) {
-        int i=0;
+        int i = 0;
         for (String x : categories) {
-            if (x==s) return i;
+            if (x == s) return i;
             else i++;
         }
         return -1;
