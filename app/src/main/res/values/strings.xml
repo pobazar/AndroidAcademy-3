@@ -22,4 +22,6 @@
     <string name="food">Food</string>
     <string name="image_intro">Intro image</string>
     <string name="news">News</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>

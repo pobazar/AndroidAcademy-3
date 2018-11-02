@@ -7,6 +7,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 
@@ -28,6 +29,9 @@ public interface NewsDao {
 
     @Query("DELETE FROM newsTable")
     void deleteAll();
+
+    @Query("DELETE FROM newsTable WHERE url = :id")
+    void deleteById(String id);
 
     @Query("SELECT * FROM newsTable WHERE title = :title LIMIT 1")
     Observable<NewsEntity> findByName(String title);

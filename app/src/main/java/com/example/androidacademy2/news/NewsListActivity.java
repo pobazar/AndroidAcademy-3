@@ -75,6 +75,7 @@ public class NewsListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(LOG, "OnCreate");
         setContentView(R.layout.activity_news_list);
         tryButton = findViewById(R.id.button_try_again);
         categoryButton = findViewById(R.id.button_category);
@@ -98,12 +99,12 @@ public class NewsListActivity extends AppCompatActivity {
                                 Log.d(LOG, "Change category");
                                 //visibleProgress();
                                 //loadItems();
-                                final Disposable Disposable =  deleteNews()
+                                final Disposable Disposable1 =  deleteNews()
                                         .subscribeOn(Schedulers.computation())
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribe();
 
-                                compositeDisposable.add(Disposable);
+                                compositeDisposable.add(Disposable1);
 
                             });
             AlertDialog alert = builder.create();
@@ -122,19 +123,20 @@ public class NewsListActivity extends AppCompatActivity {
         categoryButton.setText(category);
 
         db = AppDatabase.getAppDatabase(this);
+        final Disposable Disposable1 =  deleteNews()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+
+        compositeDisposable.add(Disposable1);
         updateNews();
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         Log.d(LOG, "Application start");
-        final Disposable Disposable =  deleteNews()
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
-
-        compositeDisposable.add(Disposable);
         //loadItems();
     }
 
@@ -209,7 +211,8 @@ public class NewsListActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        compositeDisposable.dispose();
+        Log.d(LOG,"OnStop");
+      //  compositeDisposable.dispose();
     }
 
     @Override

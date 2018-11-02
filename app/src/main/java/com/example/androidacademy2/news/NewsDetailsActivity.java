@@ -1,22 +1,30 @@
 package com.example.androidacademy2.news;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.androidacademy2.AboutActivity;
 import com.example.androidacademy2.AppDatabase;
 import com.example.androidacademy2.DB.NewsEntity;
 import com.example.androidacademy2.R;
+
+import java.util.concurrent.Callable;
 
 public class NewsDetailsActivity extends AppCompatActivity {
 
@@ -28,7 +36,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
     private static final String LOG = "My_Log";
     private AppDatabase db;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-    Disposable Disposable;
+    Disposable Disposable2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +47,11 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
         db = AppDatabase.getAppDatabase(this);
 
-        Disposable = db.newsDao().findById(url)
+        Disposable2 = db.newsDao().findById(url)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::showNewsDetails, this::logError);
-        compositeDisposable.add(Disposable);
+        compositeDisposable.add(Disposable2);
 
         /*webView = findViewById (R.id.web_news);
         WebSettings webSettings = webView.getSettings();
@@ -74,5 +82,38 @@ public class NewsDetailsActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         compositeDisposable.dispose();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
+        getMenuInflater().inflate(R.menu.news_details_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.edit_button_menu:
+               // startActivity(new Intent(this, AboutActivity.class));
+                return true;
+            case R.id.delete_button_menu:
+                final Disposable Disposable = deleteNews()
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe();
+
+                compositeDisposable.add(Disposable);
+                this.finish();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public Completable deleteNews() {
+        return Completable.fromCallable((Callable<Void>) () -> {
+            db.newsDao().deleteById(url);
+            Log.d(LOG,"1 news delete");
+            return null;
+        });
     }
 }
