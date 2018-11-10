@@ -28,6 +28,7 @@ import com.example.androidacademy2.AboutActivity;
 import com.example.androidacademy2.AppDatabase;
 import com.example.androidacademy2.DB.NewsEntity;
 import com.example.androidacademy2.Intro.IntroFragment;
+import com.example.androidacademy2.MainActivity;
 import com.example.androidacademy2.R;
 
 import java.util.concurrent.Callable;
@@ -35,16 +36,16 @@ import java.util.concurrent.Callable;
 public class NewsDetailsFragment extends Fragment {
 
 
-    private String url;
+    static public String url;
     WebView webView;
     private ImageView image;
     private TextView titleText, fullText, publisheDate;
     private static final String LOG = "My_Log";
-    private static final String ARGS_URL="url";
+    private static final String ARGS_URL = "url";
     private AppDatabase db;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private Disposable Disposable2;
     private Context context;
+    private NewsFragmentListener listener;
 
 
     static public NewsDetailsFragment newInstance(String url) {
@@ -56,10 +57,25 @@ public class NewsDetailsFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof NewsFragmentListener) {
+            listener = (NewsFragmentListener) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        listener = null;
+        super.onDetach();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.activity_news_details, container, false);
-        context=getContext();
+        context = getContext();
 
         if (getArguments() != null) {
             url = getArguments().getString(ARGS_URL);
@@ -77,7 +93,8 @@ public class NewsDetailsFragment extends Fragment {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webView.loadUrl(url);*/
-        return  view;
+        MainActivity.f = 1;
+        return view;
     }
 
     @Override
@@ -86,11 +103,11 @@ public class NewsDetailsFragment extends Fragment {
         if (compositeDisposable.isDisposed()) {
             compositeDisposable = new CompositeDisposable();
         }
-        Disposable2 = db.newsDao().findById(url)
+        Disposable disposable2 = db.newsDao().findById(url)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::showNewsDetails, this::logError);
-        compositeDisposable.add(Disposable2);
+        compositeDisposable.add(disposable2);
     }
 
     private void showNewsDetails(NewsEntity news) {

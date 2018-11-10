@@ -8,17 +8,20 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.androidacademy2.AboutActivity;
 import com.example.androidacademy2.AppDatabase;
 import com.example.androidacademy2.DB.NewsEntity;
 import com.example.androidacademy2.DTO.MultimediaDTO;
 import com.example.androidacademy2.DTO.NewsDTO;
 import com.example.androidacademy2.DTO.NewsResponse;
+import com.example.androidacademy2.MainActivity;
 import com.example.androidacademy2.Net.Network;
 import com.example.androidacademy2.R;
 import com.example.androidacademy2.data_news.NewsItem;
@@ -33,6 +36,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -88,13 +92,12 @@ public class NewsListFragment extends Fragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         View view = inflater.inflate(R.layout.activity_news_list, container, false);
-        context=getContext();
+        context = getContext();
 
         Log.d(LOG, "OnCreate");
         tryButton = view.findViewById(R.id.button_try_again);
@@ -143,13 +146,10 @@ public class NewsListFragment extends Fragment {
         categoryButton.setText(category);
 
         db = AppDatabase.getAppDatabase(context);
-        final Disposable Disposable1 = deleteNews()
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
 
-        compositeDisposable.add(Disposable1);
         updateNews();
+
+        MainActivity.f = 0;
 
         return view;
     }
@@ -164,7 +164,8 @@ public class NewsListFragment extends Fragment {
         //loadItems();
     }
 
-    public void loadItems() {
+
+    private void loadItems() {
         Log.d(LOG, "start rx load news");
         visibleProgress();
         final Disposable searchDisposable = Network.getInstance()
@@ -178,7 +179,7 @@ public class NewsListFragment extends Fragment {
         compositeDisposable.add(searchDisposable);
     }
 
-    public void updateNews() {
+    private void updateNews() {
         final Disposable newsRoomDisposable = getNews()
                 .map(this::daoToNews)
                 .subscribeOn(Schedulers.io())
@@ -187,7 +188,7 @@ public class NewsListFragment extends Fragment {
         compositeDisposable.add(newsRoomDisposable);
     }
 
-    public void showNews(List<NewsItem> news) {
+    private void showNews(List<NewsItem> news) {
         visibleRecycler();
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             recyclerView.setAdapter(new NewsRecyclerAdapter(context, news, clickListener));
@@ -196,19 +197,26 @@ public class NewsListFragment extends Fragment {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), 1);
             recyclerView.addItemDecoration(dividerItemDecoration);
         } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
             recyclerView.setAdapter(new NewsRecyclerAdapter(getContext(), news, clickListener));
-            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+            if (MainActivity.isTwoPanel) {
+                recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+            }
+            else
+            {
+                recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+            }
 
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), 1);
             recyclerView.addItemDecoration(dividerItemDecoration);
         }
     }
 
-    public void completeLoad(NewsEntity[] newsEntities) {
+    private void completeLoad(NewsEntity[] newsEntities) {
         Log.d(LOG, "download " + newsEntities.length + " news");
     }
 
-    public void saveNews(NewsEntity[] newsEntities) {
+    private void saveNews(NewsEntity[] newsEntities) {
         db.newsDao().deleteAll();
         db.newsDao().insertAll(newsEntities);
         Log.d(LOG, "save " + newsEntities.length + " news to DB");
@@ -224,7 +232,7 @@ public class NewsListFragment extends Fragment {
         return db.newsDao().loadAllByCategory(cat);
     }
 
-    public Completable deleteNews() {
+    private Completable deleteNews() {
         return Completable.fromCallable((Callable<Void>) () -> {
             db.newsDao().deleteAll();
             Log.d(LOG, "rows delete");
