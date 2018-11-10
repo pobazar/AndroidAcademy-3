@@ -58,7 +58,7 @@ public class NewsListActivity extends AppCompatActivity {
     String category;
     //private NewsRepository newsRepository;
     private AppDatabase db;
-    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
     static private final String[] categories = {"home", "world", "opinion", "national", "politics", "upshot", "nyregion", "business", "technology", "science", "health", "sports", "arts", "books", "movies",
             "theater", "sundayreview", "fashion", "tmagazine", "food", "travel", "magazine", "realestate", "automobiles", "obituaries", "insider"};
 
@@ -136,6 +136,9 @@ public class NewsListActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        if (compositeDisposable.isDisposed()) {
+            compositeDisposable = new CompositeDisposable();
+        }
         Log.d(LOG, "Application start");
         //loadItems();
     }

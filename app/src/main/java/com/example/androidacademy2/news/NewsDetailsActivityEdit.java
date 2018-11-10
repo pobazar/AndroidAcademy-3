@@ -32,7 +32,7 @@ public class NewsDetailsActivityEdit extends AppCompatActivity {
     EditText titleText, fullText, publisheDate;
     private static final String LOG = "My_Log";
     private AppDatabase db;
-    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
     Disposable Disposable2, Disposable3;
 
     @Override
@@ -52,6 +52,10 @@ public class NewsDetailsActivityEdit extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        if (compositeDisposable.isDisposed()) {
+            compositeDisposable = new CompositeDisposable();
+        }
         Disposable2 = db.newsDao().findById(url)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
