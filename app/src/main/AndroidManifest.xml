@@ -14,24 +14,19 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".IntroActivity"
-            android:label="@string/news">
+            android:name=".Intro.IntroActivity"
+            android:label="@string/news"></activity>
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/title_about" />
+        <activity android:name=".news.NewsDetailsActivityEdit" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".AboutActivity"
-            android:label="@string/title_about" />
-        <activity
-            android:name=".news.NewsDetailsActivity"
-            android:label="@string/title_recycler" />
-        <activity android:name=".news.NewsListActivity"
-            android:label="@string/nytimes"/>
-        <activity android:name=".news.NewsDetailsActivityEdit" />
-
     </application>
 
 </manifest>

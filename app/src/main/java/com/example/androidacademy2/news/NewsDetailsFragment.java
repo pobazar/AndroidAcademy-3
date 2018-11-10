@@ -2,17 +2,22 @@ package com.example.androidacademy2.news;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -22,40 +27,61 @@ import com.bumptech.glide.Glide;
 import com.example.androidacademy2.AboutActivity;
 import com.example.androidacademy2.AppDatabase;
 import com.example.androidacademy2.DB.NewsEntity;
+import com.example.androidacademy2.Intro.IntroFragment;
 import com.example.androidacademy2.R;
 
 import java.util.concurrent.Callable;
 
-public class NewsDetailsActivity extends AppCompatActivity {
+public class NewsDetailsFragment extends Fragment {
 
 
-    String url;
+    private String url;
     WebView webView;
-    ImageView image;
-    TextView titleText, fullText, publisheDate;
+    private ImageView image;
+    private TextView titleText, fullText, publisheDate;
     private static final String LOG = "My_Log";
+    private static final String ARGS_URL="url";
     private AppDatabase db;
-    private  CompositeDisposable compositeDisposable = new CompositeDisposable();
-    Disposable Disposable2;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private Disposable Disposable2;
+    private Context context;
+
+
+    static public NewsDetailsFragment newInstance(String url) {
+        NewsDetailsFragment pageFragment = new NewsDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ARGS_URL, url);
+        pageFragment.setArguments(bundle);
+        return pageFragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news_details);
-        url = getIntent().getStringExtra("url");
+        View view = inflater.inflate(R.layout.activity_news_details, container, false);
+        context=getContext();
+
+        if (getArguments() != null) {
+            url = getArguments().getString(ARGS_URL);
+        }
         Log.d(LOG, url);
 
-        db = AppDatabase.getAppDatabase(this);
+        db = AppDatabase.getAppDatabase(context);
 
+        titleText = view.findViewById(R.id.title_news_details);
+        fullText = view.findViewById(R.id.full_news_details);
+        publisheDate = view.findViewById(R.id.date_news_details);
+        image = view.findViewById(R.id.image_news_details);
 
         /*webView = findViewById (R.id.web_news);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webView.loadUrl(url);*/
+        return  view;
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         if (compositeDisposable.isDisposed()) {
             compositeDisposable = new CompositeDisposable();
@@ -68,16 +94,13 @@ public class NewsDetailsActivity extends AppCompatActivity {
     }
 
     private void showNewsDetails(NewsEntity news) {
-        titleText = findViewById(R.id.title_news_details);
-        fullText = findViewById(R.id.full_news_details);
-        publisheDate = findViewById(R.id.date_news_details);
-        image = findViewById(R.id.image_news_details);
+
 
         titleText.setText(news.getTitle());
         fullText.setText(news.getPreviewText());
         publisheDate.setText(news.getPublishDate());
-        Glide.with(this).load(news.getImageUrl()).into(image);
-        setTitle(news.getCategory());
+        Glide.with(context).load(news.getImageUrl()).into(image);
+        //setTitle(news.getCategory());
     }
 
     private void logError(Throwable th) {
@@ -85,36 +108,9 @@ public class NewsDetailsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         // compositeDisposable.dispose();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
-        getMenuInflater().inflate(R.menu.news_details_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.edit_button_menu:
-                Intent newsDetailsActivityIntent = new Intent(this, NewsDetailsActivityEdit.class);
-                newsDetailsActivityIntent.putExtra("url", url);
-                startActivity(newsDetailsActivityIntent);
-                return true;
-            case R.id.delete_button_menu:
-                final Disposable Disposable = deleteNews()
-                        .subscribeOn(Schedulers.computation())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe();
-
-                compositeDisposable.add(Disposable);
-                this.finish();
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     public Completable deleteNews() {

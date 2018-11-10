@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/Grey"
-    tools:context=".IntroActivity">
+    tools:context=".Intro.IntroActivity">
 
     <Button
         android:id="@+id/button_news"
@@ -30,6 +30,7 @@
         app:layout_constraintBottom_toTopOf="@+id/button_news"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+    </androidx.viewpager.widget.ViewPager>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

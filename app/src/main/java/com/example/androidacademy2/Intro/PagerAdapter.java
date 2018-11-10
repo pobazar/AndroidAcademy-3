@@ -1,5 +1,7 @@
-package com.example.androidacademy2;
+package com.example.androidacademy2.Intro;
 
+
+import com.example.androidacademy2.Intro.IntroFragment;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -14,8 +16,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        IntroFragment fr=new IntroFragment();
-        return fr.newInstance(position);
+        return IntroFragment.newInstance(position);
     }
 
     @Override
