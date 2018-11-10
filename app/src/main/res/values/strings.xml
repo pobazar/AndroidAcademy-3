@@ -16,4 +16,14 @@
     <string name="menu_about">About</string>
     <string name="menu_news">News</string>
     <string name="image_news">Image news</string>
+    <string name="load_complete">Download complete</string>
+    <string name="try_again">Try again</string>
+    <string name="connection_failed">Connection is failed</string>
+    <string name="food">Food</string>
+    <string name="image_intro">Intro image</string>
+    <string name="news">News</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="nytimes">NY Times</string>
+    <string name="save">Save</string>
 </resources>

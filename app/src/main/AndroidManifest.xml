@@ -14,8 +14,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".NewsListActivity"
-            android:label="@string/title_recycler">
+            android:name=".IntroActivity"
+            android:label="@string/news">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +25,13 @@
         <activity
             android:name=".AboutActivity"
             android:label="@string/title_about" />
-        <activity android:name=".NewsDetailsActivity"></activity>
+        <activity
+            android:name=".news.NewsDetailsActivity"
+            android:label="@string/title_recycler" />
+        <activity android:name=".news.NewsListActivity"
+            android:label="@string/nytimes"/>
+        <activity android:name=".news.NewsDetailsActivityEdit" />
+
     </application>
 
 </manifest>

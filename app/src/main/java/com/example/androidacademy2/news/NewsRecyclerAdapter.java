@@ -1,4 +1,4 @@
-package com.example.androidacademy2;
+package com.example.androidacademy2.news;
 
 import android.content.Context;
 import android.util.Log;
@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.example.androidacademy2.R;
+import com.example.androidacademy2.data_news.NewsItem;
 
 import java.util.List;
 
@@ -51,7 +53,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
         NewsItem news = newsItemList.get(position);
 
         // Fill views with our data
-        holder.nameView.setText(news.getCategory().getName());
+        holder.nameView.setText(news.getCategory());
         holder.titleView.setText(news.getTitle());
         holder.previewView.setText(news.getPreviewText());
         holder.dateView.setText(news.getPublishDate()+"");
