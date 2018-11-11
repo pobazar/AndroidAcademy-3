@@ -44,10 +44,10 @@ public class IntroFragment extends Fragment {
                 image.setImageResource(R.drawable.news_details_screen);
                 break;
             case 2:
-                image.setImageResource(R.drawable.black_square);
+                image.setImageResource(R.drawable.about_screen);
                 break;
             default:
-                //
+                image.setImageResource(R.drawable.black_square);
                 break;
         }
 

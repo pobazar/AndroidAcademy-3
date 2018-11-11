@@ -15,16 +15,18 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".Intro.IntroActivity"
-            android:label="@string/news"></activity>
-        <activity
-            android:name=".AboutActivity"
-            android:label="@string/title_about" />
-        <activity android:name=".MainActivity">
+            android:label="@string/news">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/title_about" />
+        <activity android:name=".MainActivity">
+
         </activity>
     </application>
 

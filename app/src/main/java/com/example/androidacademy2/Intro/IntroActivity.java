@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.example.androidacademy2.MainActivity;
 import com.example.androidacademy2.R;
 import com.example.androidacademy2.news.NewsListFragment;
 
@@ -34,15 +35,15 @@ public class IntroActivity extends FragmentActivity {
          if (count % 2 == 1) {
             setContentView(R.layout.intro_activity);
             butNews = findViewById(R.id.button_news);
-            butNews.setOnClickListener(v -> startActivity(new Intent(IntroActivity.this, NewsListFragment.class)));
+             //viewPager
+             pager = findViewById(R.id.viewPager_intro);
+             pagerAdapter = new PagerAdapter(getSupportFragmentManager());
+             pager.setAdapter(pagerAdapter);
+            butNews.setOnClickListener(v -> startActivity(new Intent(IntroActivity.this, MainActivity.class)));
         } else {
-            startActivity(new Intent(IntroActivity.this, NewsListFragment.class));
+            startActivity(new Intent(IntroActivity.this, MainActivity.class));
         }
 
-        //viewPager
-        pager = findViewById(R.id.viewPager_intro);
-        pagerAdapter = new PagerAdapter(getSupportFragmentManager());
-        pager.setAdapter(pagerAdapter);
     }
 
     private void saveCounter(int x) {
