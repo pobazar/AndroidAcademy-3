@@ -9,6 +9,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -25,10 +26,14 @@ public class MainActivity extends AppCompatActivity implements NewsFragmentListe
     private static final String FRAGMENT_TAG_DETAILS = "details_fragment";
     private static final String FRAGMENT_TAG_LIST = "list_fragment";
     private static final String FRAGMENT_TAG_EDIT = "edit_fragment";
+    private static final String tag1 = "tag1";
+    private static final String tag2 = "tag2";
+    private static final String tag3 = "tag3";
     private static final String LOG = "My_Log";
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private AppDatabase db;
     public static int f;
+    public static String url = "";
     public static boolean isTwoPanel;
 
     @Override
@@ -36,19 +41,45 @@ public class MainActivity extends AppCompatActivity implements NewsFragmentListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        db = AppDatabase.getAppDatabase(this);
+      /*  db = AppDatabase.getAppDatabase(this);
         final Disposable Disposable1 = deleteNews()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
 
-        compositeDisposable.add(Disposable1);
+        compositeDisposable.add(Disposable1);*/
 
 
-        isTwoPanel = findViewById(R.id.frame_detail) != null;
+        isTwoPanel = getResources().getBoolean(R.bool.is_tablet);
+        //findViewById(R.id.frame_detail) != null;
 
-        if (savedInstanceState == null) {
-            newsListFragmentStart();
+
+        if (isTwoPanel == true) {
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+
+                if (url == "") {
+                    newsListFragmentStart(R.id.activity_main_frame);
+                } else {
+                    NewsDetailsFragment fragment = NewsDetailsFragment.newInstance(url);
+
+                    int frameId = R.id.activity_main_frame;
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(frameId, fragment, FRAGMENT_TAG_DETAILS)
+                            .addToBackStack(tag2)
+                            .commit();
+                }
+            } else {
+                getSupportFragmentManager().popBackStack();
+                newsListFragmentStart(R.id.activity_main_frame);
+                if (url != "") {
+                    onNewsDetailsClicked(url);
+                }
+            }
+        } else {
+            if (savedInstanceState == null) {
+                newsListFragmentStart(R.id.activity_main_frame);
+            }
         }
     }
 
@@ -57,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements NewsFragmentListe
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -64,9 +96,9 @@ public class MainActivity extends AppCompatActivity implements NewsFragmentListe
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
             case R.id.news_button_menu:
-                newsListFragmentStart();
+                startActivity(new Intent(this, MainActivity.class));
             case R.id.edit_button_menu:
-                onNewsEditClicked(NewsDetailsFragment.url);
+                onNewsEditClicked(url);
                 return true;
            /* case R.id.delete_button_menu:
                 final Disposable Disposable = deleteNews()
@@ -90,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements NewsFragmentListe
     }
 
 
-
     @Override
     public boolean onPrepareOptionsMenu(@NonNull Menu menu) {
         menu.clear();
@@ -106,13 +137,13 @@ public class MainActivity extends AppCompatActivity implements NewsFragmentListe
         return super.onPrepareOptionsMenu(menu);
     }
 
-    public void newsListFragmentStart() {
+    public void newsListFragmentStart(int frame) {
         NewsListFragment messageFragment = new NewsListFragment();
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.activity_main_frame, messageFragment, FRAGMENT_TAG_LIST)
-                .addToBackStack(null)
+                .replace(frame, messageFragment, FRAGMENT_TAG_LIST)
+                //.addToBackStack(tag1)
                 .commit();
     }
 
@@ -120,13 +151,37 @@ public class MainActivity extends AppCompatActivity implements NewsFragmentListe
     @Override
     public void onNewsDetailsClicked(String s) {
         NewsDetailsFragment fragment = NewsDetailsFragment.newInstance(s);
-
-        int frameId = isTwoPanel? R.id.frame_detail : R.id.activity_main_frame;
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(frameId, fragment)
-                .addToBackStack(null)
-                .commit();
+        url = s;
+        int frameId = R.id.activity_main_frame;
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            frameId = R.id.activity_main_frame;
+        } else {
+            frameId = isTwoPanel ? R.id.frame_detail : R.id.activity_main_frame;
+        }
+        if (!isTwoPanel) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(frameId, fragment, FRAGMENT_TAG_DETAILS)
+                    .addToBackStack(tag2)
+                    .commit();
+        }
+        else
+        {
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(frameId, fragment, FRAGMENT_TAG_DETAILS)
+                        .addToBackStack(tag2)
+                        .commit();
+            }
+            else{
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(frameId, fragment, FRAGMENT_TAG_DETAILS)
+                        //.addToBackStack(tag2)
+                        .commit();
+            }
+        }
 
     }
 
@@ -136,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements NewsFragmentListe
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.activity_main_frame, fragment, FRAGMENT_TAG_EDIT)
-                .addToBackStack(null)
+                .addToBackStack(tag3)
                 .commit();
     }
 
