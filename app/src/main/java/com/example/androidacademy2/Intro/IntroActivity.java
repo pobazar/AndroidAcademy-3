@@ -31,8 +31,7 @@ public class IntroActivity extends FragmentActivity {
         count++;
         // Log.d(LOG, "Count = "+count);
         saveCounter(count);
-        // if (count % 2 == 1) {
-        if (true) {
+         if (count % 2 == 1) {
             setContentView(R.layout.intro_activity);
             butNews = findViewById(R.id.button_news);
             butNews.setOnClickListener(v -> startActivity(new Intent(IntroActivity.this, NewsListFragment.class)));
