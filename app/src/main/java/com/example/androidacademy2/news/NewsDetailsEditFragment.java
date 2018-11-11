@@ -2,6 +2,7 @@ package com.example.androidacademy2.news;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,11 +39,13 @@ public class NewsDetailsEditFragment extends Fragment {
     private ImageView image;
     private EditText titleText, fullText, publisheDate;
     private static final String LOG = "My_Log";
-    private static final String ARGS_URL="url";
+    private static final String ARGS_URL = "url";
     private AppDatabase db;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private Disposable Disposable2, Disposable3;
     private Context context;
+    private Button but_save;
+    private NewsFragmentListener listener;
 
     static public NewsDetailsEditFragment newInstance(String url) {
         NewsDetailsEditFragment pageFragment = new NewsDetailsEditFragment();
@@ -51,12 +55,27 @@ public class NewsDetailsEditFragment extends Fragment {
         return pageFragment;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof NewsFragmentListener) {
+            listener = (NewsFragmentListener) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        listener = null;
+        super.onDetach();
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.activity_news_details_edit, container, false);
-        context=getContext();
+        context = getContext();
 
         if (getArguments() != null) {
             url = getArguments().getString(ARGS_URL);
@@ -68,7 +87,21 @@ public class NewsDetailsEditFragment extends Fragment {
         fullText = view.findViewById(R.id.full_news_details_edit);
         publisheDate = view.findViewById(R.id.date_news_details_edit);
         image = view.findViewById(R.id.image_news_details_edit);
-        MainActivity.f=2;
+        but_save = view.findViewById(R.id.button_save_edit);
+        MainActivity.f = 2;
+
+        but_save.setOnClickListener(v -> {
+                final Disposable  Disposable3 = save()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe();
+                compositeDisposable.add(Disposable3);
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                getFragmentManager().popBackStack();
+            } else {
+                listener.deleteFragmentEdit();
+            }
+        });
         return view;
     }
 
@@ -91,6 +124,7 @@ public class NewsDetailsEditFragment extends Fragment {
         super.onStop();
         // compositeDisposable.dispose();
     }
+
 
     private void logError(Throwable th) {
         Log.d(LOG, "" + th);

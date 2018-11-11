@@ -11,6 +11,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,6 +48,8 @@ public class NewsDetailsFragment extends Fragment {
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private Context context;
     private NewsFragmentListener listener;
+    private Button but_edit;
+    private Button but_del;
 
 
     static public NewsDetailsFragment newInstance(String url) {
@@ -88,7 +92,27 @@ public class NewsDetailsFragment extends Fragment {
         fullText = view.findViewById(R.id.full_news_details);
         publisheDate = view.findViewById(R.id.date_news_details);
         image = view.findViewById(R.id.image_news_details);
+        but_edit = view.findViewById(R.id.button_edit);
+        but_del = view.findViewById(R.id.button_delete);
 
+
+        but_edit.setOnClickListener(v -> {
+            listener.onNewsEditClicked(url);
+        });
+
+
+        but_del.setOnClickListener(v -> {
+            Disposable disposable1 = deleteNews()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe();
+            compositeDisposable.add(disposable1);
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                getFragmentManager().popBackStack();
+            } else {
+                listener.deleteFragmentDetails();
+            }
+        });
         /*webView = findViewById (R.id.web_news);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);

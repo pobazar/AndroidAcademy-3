@@ -85,7 +85,7 @@ public class AboutActivity extends AppCompatActivity {
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
             case R.id.news_button_menu:
-                startActivity(new Intent(this, NewsListFragment.class));
+                startActivity(new Intent(this, MainActivity.class));
             default:
                 return super.onOptionsItemSelected(item);
         }
