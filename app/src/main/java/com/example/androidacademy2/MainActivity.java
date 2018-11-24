@@ -32,11 +32,12 @@ public class MainActivity extends AppCompatActivity implements NewsFragmentListe
     private static final String LOG = "My_Log";
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private AppDatabase db;
-    public static int f=0;
+    public static int f = 0;
     public static String url = "";
     public static boolean isTwoPanel;
     NewsDetailsFragment fragment1;
     NewsDetailsEditFragment fragment2;
+    public static String category;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +51,12 @@ public class MainActivity extends AppCompatActivity implements NewsFragmentListe
                 .subscribe();
 
         compositeDisposable.add(Disposable1);*/
-
+        category = "food";
 
         isTwoPanel = getResources().getBoolean(R.bool.is_tablet);
 
 
-        if (isTwoPanel == true) {
+        if (isTwoPanel) {
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 
 
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements NewsFragmentListe
             } else {
                 getSupportFragmentManager().popBackStack();
                 newsListFragmentStart(R.id.activity_main_frame);
-                if (url != "") {
+                if (!url.equals("")) {
                     onNewsDetailsClicked(url);
                 }
             }
@@ -196,19 +197,19 @@ public class MainActivity extends AppCompatActivity implements NewsFragmentListe
             }
         }
     }
+
     @Override
-    public void deleteFragmentDetails()
-    {
-        url="";
+    public void deleteFragmentDetails() {
+        url = "";
         getSupportFragmentManager()
                 .beginTransaction()
                 .remove(fragment1)
                 .commit();
     }
+
     @Override
-    public void deleteFragmentEdit()
-    {
-        url="";
+    public void deleteFragmentEdit() {
+        url = "";
         getSupportFragmentManager()
                 .beginTransaction()
                 .remove(fragment2)

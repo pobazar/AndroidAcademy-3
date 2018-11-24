@@ -26,4 +26,7 @@
     <string name="delete">Delete</string>
     <string name="nytimes">NY Times</string>
     <string name="save">Save</string>
+    <string name="download_news">Download news</string>
+    <string name="download_complete">Download news complete</string>
+    <string name="download_failed">Download news failed</string>
 </resources>

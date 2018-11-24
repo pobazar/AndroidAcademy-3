@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.example.androidacademy2.DB.NewsEntity;
 import com.example.androidacademy2.DTO.MultimediaDTO;
 import com.example.androidacademy2.DTO.NewsDTO;
 import com.example.androidacademy2.DTO.NewsResponse;
+import com.example.androidacademy2.DownloadService;
 import com.example.androidacademy2.MainActivity;
 import com.example.androidacademy2.Net.Network;
 import com.example.androidacademy2.R;
@@ -56,7 +58,6 @@ public class NewsListFragment extends Fragment {
     private TextView text;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
-    private String category;
     //private NewsRepository newsRepository;
     private AppDatabase db;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -114,14 +115,12 @@ public class NewsListFragment extends Fragment {
             builder = new AlertDialog.Builder(context);
             builder.setTitle("Choose category").setCancelable(false)
                     // добавляем переключатели
-                    .setSingleChoiceItems(categories, checkitem(category),
+                    .setSingleChoiceItems(categories, checkitem(MainActivity.category),
                             (dialog, item) -> {
-                                category = categories[item];
-                                categoryButton.setText(category);
+                                MainActivity.category = categories[item];
+                                categoryButton.setText(MainActivity.category);
                                 dialog.cancel();
                                 Log.d(LOG, "Change category");
-                                //visibleProgress();
-                                //loadItems();
                                 final Disposable Disposable1 = deleteNews()
                                         .subscribeOn(Schedulers.computation())
                                         .observeOn(AndroidSchedulers.mainThread())
@@ -142,8 +141,8 @@ public class NewsListFragment extends Fragment {
         text = view.findViewById(R.id.text_complete);
         recyclerView = view.findViewById(R.id.recycler_news);
         progressBar = view.findViewById(R.id.progressBar_news);
-        category = "food";
-        categoryButton.setText(category);
+        MainActivity.category = "food";
+        categoryButton.setText(MainActivity.category);
 
         db = AppDatabase.getAppDatabase(context);
 
@@ -161,22 +160,21 @@ public class NewsListFragment extends Fragment {
             compositeDisposable = new CompositeDisposable();
         }
         Log.d(LOG, "Application start");
-        //loadItems();
     }
 
 
     private void loadItems() {
         Log.d(LOG, "start rx load news");
         visibleProgress();
-        final Disposable searchDisposable = Network.getInstance()
+        final  Disposable downloadDisposable = Network.getInstance()
                 .news()
-                .search(category)
+                .search(MainActivity.category)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation())
                 .map(this::dtoResponseToDao)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::completeLoad, this::visibleError);
-        compositeDisposable.add(searchDisposable);
+        compositeDisposable.add(downloadDisposable);
     }
 
     private void updateNews() {
@@ -201,9 +199,7 @@ public class NewsListFragment extends Fragment {
             recyclerView.setAdapter(new NewsRecyclerAdapter(getContext(), news, clickListener));
             if (MainActivity.isTwoPanel) {
                 recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
-            }
-            else
-            {
+            } else {
                 recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
             }
 
@@ -212,17 +208,14 @@ public class NewsListFragment extends Fragment {
         }
     }
 
-    private void completeLoad(NewsEntity[] newsEntities) {
-        Log.d(LOG, "download " + newsEntities.length + " news");
-    }
-
     private void saveNews(NewsEntity[] newsEntities) {
         db.newsDao().deleteAll();
         db.newsDao().insertAll(newsEntities);
         Log.d(LOG, "save " + newsEntities.length + " news to DB");
     }
 
-    public Observable<List<NewsEntity>> getNews() {
+    private Observable<List<NewsEntity>> getNews() {
+
         db = AppDatabase.getAppDatabase(context);
         return db.newsDao().getAll();
     }
@@ -238,6 +231,10 @@ public class NewsListFragment extends Fragment {
             Log.d(LOG, "rows delete");
             return null;
         });
+    }
+
+    private void completeLoad(NewsEntity[] newsEntities) {
+        Log.d(LOG, "download " + newsEntities.length + " news in service");
     }
 
     @Override
@@ -277,21 +274,6 @@ public class NewsListFragment extends Fragment {
         categoryButton.setEnabled(false);
         tryButton.setEnabled(true);
         Log.e(LOG, th.getMessage(), th);
-    }
-
-    private List<NewsItem> dtoToNews(List<NewsDTO> listdto) {
-        List<NewsItem> news = new ArrayList<>();
-        for (NewsDTO x : listdto) {
-            String image = "";
-            for (MultimediaDTO y : x.getMultimedia()) {
-                if (y.getFormat().equals("Standard Thumbnail")) {
-                    image = y.getUrl();
-                    break;
-                }
-            }
-            news.add(new NewsItem(x.getTitle(), image, x.getSection(), x.getPublishedDate().replace('T', ' '), x.getAbstract1(), "", x.getUrl()));
-        }
-        return news;
     }
 
     private NewsEntity[] dtoResponseToDao(@NonNull NewsResponse response) {
@@ -343,4 +325,5 @@ public class NewsListFragment extends Fragment {
         }
         return -1;
     }
+
 }
