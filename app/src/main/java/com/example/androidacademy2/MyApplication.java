@@ -24,7 +24,7 @@ public class MyApplication extends Application {
         Constraints myConstraints = new Constraints.Builder()
                 .setRequiresCharging(true)
                 .build();
-        WorkRequest workRequest = new PeriodicWorkRequest.Builder(UploadWork.class,3, TimeUnit.HOURS)
+        WorkRequest workRequest = new PeriodicWorkRequest.Builder(UploadWork.class,15, TimeUnit.MINUTES)
                 .setConstraints(myConstraints)
                 .build();
         WorkManager.getInstance().enqueue(workRequest);

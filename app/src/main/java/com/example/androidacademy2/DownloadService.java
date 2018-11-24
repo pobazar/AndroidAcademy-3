@@ -22,6 +22,7 @@ import com.example.androidacademy2.Net.Network;
 import com.example.androidacademy2.news.NewsListFragment;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -50,21 +51,20 @@ public class DownloadService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        category = intent.getStringExtra("KEY");
 
         if (MainActivity.category == null) {
             category = "food";
         } else {
             category = MainActivity.category;
         }
-        downloadDisposable = Network.getInstance()
-                .news()
-                .search(category)
+        downloadDisposable = NetworkUtils.sNetworkUtils.getOnlineNetwork()
+                .timeout(1, TimeUnit.MINUTES).flatMap(aLong ->
+                        Network.getInstance()
+                                .news()
+                                .search(category))
                 .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation())
-                .map(this::dtoResponseToDao)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::completeLoad, this::failedLoad);
+                .subscribe(this::dtoResponseToDao, this::failedLoad);
 
         return START_STICKY;
     }
@@ -76,7 +76,7 @@ public class DownloadService extends Service {
         }
     }
 
-    private NewsEntity[] dtoResponseToDao(@NonNull NewsResponse response) {
+    private void dtoResponseToDao(@NonNull NewsResponse response) {
         //Gson gson = new Gson();
         // String gsonResponse = response.body()+"";
         //NewsResponse newsResponse = gson.fromJson(gsonResponse, NewsResponse.class);
@@ -105,7 +105,8 @@ public class DownloadService extends Service {
             i++;
         }
         saveNews(news);
-        return news;
+        completeLoad(news);
+        //return news;
     }
 
     private void saveNews(NewsEntity[] newsEntities) {

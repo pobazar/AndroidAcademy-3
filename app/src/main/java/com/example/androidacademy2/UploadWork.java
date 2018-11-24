@@ -30,7 +30,7 @@ public class UploadWork extends Worker {
     @Override
     public Result doWork() {
         Intent intent = new Intent(context, DownloadService.class);
-        intent.putExtra("KEY", MainActivity.category);
+
         if (Build.VERSION.SDK_INT > 26) {
             context.startForegroundService(intent);
         } else {

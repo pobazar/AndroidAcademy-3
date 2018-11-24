@@ -39,7 +39,6 @@ public class NetworkUtils {
         // otherwise check if we are connected
         return networkInfo != null && networkInfo.isConnected();
     }
-
     public class NetworkReceiver extends BroadcastReceiver {
 
         @Override
