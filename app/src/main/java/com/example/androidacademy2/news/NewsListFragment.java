@@ -1,30 +1,31 @@
 package com.example.androidacademy2.news;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.androidacademy2.AboutActivity;
 import com.example.androidacademy2.AppDatabase;
-import com.example.androidacademy2.DB.NewsDao;
 import com.example.androidacademy2.DB.NewsEntity;
 import com.example.androidacademy2.DTO.MultimediaDTO;
 import com.example.androidacademy2.DTO.NewsDTO;
 import com.example.androidacademy2.DTO.NewsResponse;
+import com.example.androidacademy2.MainActivity;
 import com.example.androidacademy2.Net.Network;
 import com.example.androidacademy2.R;
 import com.example.androidacademy2.data_news.NewsItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +34,9 @@ import java.util.concurrent.Callable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -46,40 +48,61 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class NewsListActivity extends AppCompatActivity {
+public class NewsListFragment extends Fragment {
     @Nullable
     private AsyncTask<Long, Void, List<NewsItem>> asyncTask;
-    public static final String LOG = "My_Log";
-    Button tryButton, categoryButton;
-    FloatingActionButton loadButton;
-    TextView text;
-    RecyclerView recyclerView;
-    ProgressBar progressBar;
-    String category;
+    private static final String LOG = "My_Log";
+    private Button tryButton, categoryButton;
+    private TextView text;
+    private RecyclerView recyclerView;
+    private ProgressBar progressBar;
+    private String category;
     //private NewsRepository newsRepository;
     private AppDatabase db;
-    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
     static private final String[] categories = {"home", "world", "opinion", "national", "politics", "upshot", "nyregion", "business", "technology", "science", "health", "sports", "arts", "books", "movies",
             "theater", "sundayreview", "fashion", "tmagazine", "food", "travel", "magazine", "realestate", "automobiles", "obituaries", "insider"};
 
     public List<NewsItem> news;
+    private Context context;
+    private NewsFragmentListener listener;
 
     private final NewsRecyclerAdapter.OnItemClickListener clickListener = news ->
     {
-        Intent newsDetailsActivityIntent = new Intent(this, NewsDetailsActivity.class);
+      /* Intent newsDetailsActivityIntent = new Intent(context, NewsDetailsFragment.class);
         newsDetailsActivityIntent.putExtra("url", news.getUrl());
-        startActivity(newsDetailsActivityIntent);
+        startActivity(newsDetailsActivityIntent);*/
+
+        listener.onNewsDetailsClicked(news.getUrl());
     };
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof NewsFragmentListener) {
+            listener = (NewsFragmentListener) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        listener = null;
+        super.onDetach();
+    }
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        View view = inflater.inflate(R.layout.activity_news_list, container, false);
+        context = getContext();
+
         Log.d(LOG, "OnCreate");
-        setContentView(R.layout.activity_news_list);
-        tryButton = findViewById(R.id.button_try_again);
-        categoryButton = findViewById(R.id.button_category);
-        loadButton = findViewById(R.id.button_load_news);
+        tryButton = view.findViewById(R.id.button_try_again);
+        categoryButton = view.findViewById(R.id.button_category);
+        FloatingActionButton loadButton = view.findViewById(R.id.button_load_news);
         tryButton.setOnClickListener(v -> {
             Log.d(LOG, "Try connect");
             visibleProgress();
@@ -88,7 +111,7 @@ public class NewsListActivity extends AppCompatActivity {
 
         categoryButton.setOnClickListener(v -> {
             AlertDialog.Builder builder;
-            builder = new AlertDialog.Builder(NewsListActivity.this);
+            builder = new AlertDialog.Builder(context);
             builder.setTitle("Choose category").setCancelable(false)
                     // добавляем переключатели
                     .setSingleChoiceItems(categories, checkitem(category),
@@ -99,7 +122,7 @@ public class NewsListActivity extends AppCompatActivity {
                                 Log.d(LOG, "Change category");
                                 //visibleProgress();
                                 //loadItems();
-                                final Disposable Disposable1 =  deleteNews()
+                                final Disposable Disposable1 = deleteNews()
                                         .subscribeOn(Schedulers.computation())
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribe();
@@ -116,31 +139,33 @@ public class NewsListActivity extends AppCompatActivity {
             loadItems();
         });
 
-        text = findViewById(R.id.text_complete);
-        recyclerView = findViewById(R.id.recycler_news);
-        progressBar = findViewById(R.id.progressBar_news);
+        text = view.findViewById(R.id.text_complete);
+        recyclerView = view.findViewById(R.id.recycler_news);
+        progressBar = view.findViewById(R.id.progressBar_news);
         category = "food";
         categoryButton.setText(category);
 
-        db = AppDatabase.getAppDatabase(this);
-        final Disposable Disposable1 =  deleteNews()
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+        db = AppDatabase.getAppDatabase(context);
 
-        compositeDisposable.add(Disposable1);
         updateNews();
 
+        MainActivity.f = 0;
+
+        return view;
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
+        if (compositeDisposable.isDisposed()) {
+            compositeDisposable = new CompositeDisposable();
+        }
         Log.d(LOG, "Application start");
         //loadItems();
     }
 
-    public void loadItems() {
+
+    private void loadItems() {
         Log.d(LOG, "start rx load news");
         visibleProgress();
         final Disposable searchDisposable = Network.getInstance()
@@ -154,7 +179,7 @@ public class NewsListActivity extends AppCompatActivity {
         compositeDisposable.add(searchDisposable);
     }
 
-    public void updateNews() {
+    private void updateNews() {
         final Disposable newsRoomDisposable = getNews()
                 .map(this::daoToNews)
                 .subscribeOn(Schedulers.io())
@@ -163,44 +188,51 @@ public class NewsListActivity extends AppCompatActivity {
         compositeDisposable.add(newsRoomDisposable);
     }
 
-    public void showNews(List<NewsItem> news) {
+    private void showNews(List<NewsItem> news) {
         visibleRecycler();
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            recyclerView.setAdapter(new NewsRecyclerAdapter(this, news, clickListener));
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(new NewsRecyclerAdapter(context, news, clickListener));
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), 1);
             recyclerView.addItemDecoration(dividerItemDecoration);
         } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            recyclerView.setAdapter(new NewsRecyclerAdapter(this, news, clickListener));
-            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+
+            recyclerView.setAdapter(new NewsRecyclerAdapter(getContext(), news, clickListener));
+            if (MainActivity.isTwoPanel) {
+                recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+            }
+            else
+            {
+                recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+            }
 
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), 1);
             recyclerView.addItemDecoration(dividerItemDecoration);
         }
     }
 
-    public void completeLoad(NewsEntity[] newsEntities) {
+    private void completeLoad(NewsEntity[] newsEntities) {
         Log.d(LOG, "download " + newsEntities.length + " news");
     }
 
-    public void saveNews(NewsEntity[] newsEntities) {
+    private void saveNews(NewsEntity[] newsEntities) {
         db.newsDao().deleteAll();
         db.newsDao().insertAll(newsEntities);
         Log.d(LOG, "save " + newsEntities.length + " news to DB");
     }
 
     public Observable<List<NewsEntity>> getNews() {
-        db = AppDatabase.getAppDatabase(this);
+        db = AppDatabase.getAppDatabase(context);
         return db.newsDao().getAll();
     }
 
     public Observable<List<NewsEntity>> getNews(String cat) {
-        db = AppDatabase.getAppDatabase(this);
+        db = AppDatabase.getAppDatabase(context);
         return db.newsDao().loadAllByCategory(cat);
     }
 
-    public Completable deleteNews() {
+    private Completable deleteNews() {
         return Completable.fromCallable((Callable<Void>) () -> {
             db.newsDao().deleteAll();
             Log.d(LOG, "rows delete");
@@ -209,30 +241,12 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
-        Log.d(LOG,"OnStop");
-      //  compositeDisposable.dispose();
+        Log.d(LOG, "OnStop");
+        //  compositeDisposable.dispose();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.about_button_menu:
-                startActivity(new Intent(this, AboutActivity.class));
-                return true;
-            case R.id.news_button_menu:
-                startActivity(new Intent(this, NewsListActivity.class));
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     private void visibleProgress() {
         text.setVisibility(View.GONE);

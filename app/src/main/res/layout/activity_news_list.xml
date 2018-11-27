@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".news.NewsListActivity">
+    tools:context=".news.NewsListFragment">
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -96,7 +96,7 @@
         android:layout_height="wrap_content"
         android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        tools:context=".news.NewsListActivity"
+        tools:context=".news.NewsListFragment"
         tools:itemCount="7"
         tools:listitem="@layout/item_news"></androidx.recyclerview.widget.RecyclerView>
 
