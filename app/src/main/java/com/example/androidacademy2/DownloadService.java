@@ -35,9 +35,11 @@ public class DownloadService extends Service {
     private Disposable downloadDisposable;
     private static final String LOG = "My_Log";
     public static final String CHANNEL_ID = "UPDATE_NEWS_CHANNEL";
-    public static final int ID = 12345;
+    public static final int ID1 = 12345;
+    public static final int ID2 = 12331245;
     AppDatabase db;
     String category;
+    PendingIntent resultPendingIntent;
 
     public IBinder onBind(Intent intent) {
         return null;
@@ -46,6 +48,22 @@ public class DownloadService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        //Создание интента
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        createChannel();
+
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(getString(R.string.download_news))
+                .setContentText(getString(R.string.download_progress))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .build();
+        startForeground(ID1, notification);
     }
 
 
@@ -62,9 +80,11 @@ public class DownloadService extends Service {
                         Network.getInstance()
                                 .news()
                                 .search(category))
+                .map(this::dtoResponseToDao)
+                .doOnSuccess(this::saveNews)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::dtoResponseToDao, this::failedLoad);
+                .subscribe(this::completeLoad, this::failedLoad);
 
         return START_STICKY;
     }
@@ -76,12 +96,7 @@ public class DownloadService extends Service {
         }
     }
 
-    private void dtoResponseToDao(@NonNull NewsResponse response) {
-        //Gson gson = new Gson();
-        // String gsonResponse = response.body()+"";
-        //NewsResponse newsResponse = gson.fromJson(gsonResponse, NewsResponse.class);
-        //List<NewsDTO> newsdto = response.getData();
-
+    private NewsEntity[] dtoResponseToDao(@NonNull NewsResponse response) {
         List<NewsDTO> listdto = response.getData();
         NewsEntity[] news = new NewsEntity[listdto.size()];
         int i = 0;
@@ -104,9 +119,7 @@ public class DownloadService extends Service {
             news[i] = nn;
             i++;
         }
-        saveNews(news);
-        completeLoad(news);
-        //return news;
+        return news;
     }
 
     private void saveNews(NewsEntity[] newsEntities) {
@@ -117,29 +130,41 @@ public class DownloadService extends Service {
     }
 
     private void completeLoad(NewsEntity[] newsEntities) {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Log.d(LOG, "download " + newsEntities.length + " news in service");
-        showNotification(getString(R.string.download_complete));
-        //  stopSelf();
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(ID2, showNotification(getString(R.string.download_complete)));
+          stopSelf();
     }
 
     private void failedLoad(Throwable th) {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Log.d(LOG, "download news failed in service: " + th);
-        showNotification(getString(R.string.download_failed));
-        //  stopSelf();
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(ID2, showNotification(getString(R.string.download_failed)));
+          stopSelf();
     }
 
-    public void showNotification(String s) {
-        //Создание интента
-        Intent resultIntent = new Intent(this, MainActivity.class);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
+    public Notification showNotification(String s) {
+        //Создание уведомления
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setContentTitle(getString(R.string.download_news))
+                .setContentText(s)
+                .setPriority(NotificationCompat.FLAG_AUTO_CANCEL)
+                .setContentIntent(resultPendingIntent);
+        return mBuilder.build();
+    }
 
+    public void createChannel() {
         //Создание канала
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String name = "Notifications";
@@ -148,18 +173,6 @@ public class DownloadService extends Service {
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(channel);
         }
-
-        //Создание уведомления
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentTitle(getString(R.string.download_news))
-                .setContentText(s)
-                .setPriority(NotificationCompat.FLAG_AUTO_CANCEL)
-                .setContentIntent(resultPendingIntent);
-
-        // NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        // notificationManager.notify(ID, mBuilder.build());
-        startForeground(ID, mBuilder.build());
     }
 
 }

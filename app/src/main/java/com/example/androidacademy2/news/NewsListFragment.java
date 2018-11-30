@@ -121,12 +121,8 @@ public class NewsListFragment extends Fragment {
                                 categoryButton.setText(MainActivity.category);
                                 dialog.cancel();
                                 Log.d(LOG, "Change category");
-                                final Disposable Disposable1 = deleteNews()
-                                        .subscribeOn(Schedulers.computation())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe();
-
-                                compositeDisposable.add(Disposable1);
+                                visibleProgress();
+                                loadItems();
 
                             });
             AlertDialog alert = builder.create();
@@ -172,6 +168,7 @@ public class NewsListFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation())
                 .map(this::dtoResponseToDao)
+                .doOnSuccess(this::saveNews)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::completeLoad, this::visibleError);
         compositeDisposable.add(downloadDisposable);
@@ -234,7 +231,7 @@ public class NewsListFragment extends Fragment {
     }
 
     private void completeLoad(NewsEntity[] newsEntities) {
-        Log.d(LOG, "download " + newsEntities.length + " news in service");
+        Log.d(LOG, "download " + newsEntities.length + " news");
     }
 
     @Override
@@ -277,11 +274,6 @@ public class NewsListFragment extends Fragment {
     }
 
     private NewsEntity[] dtoResponseToDao(@NonNull NewsResponse response) {
-        //Gson gson = new Gson();
-        // String gsonResponse = response.body()+"";
-        //NewsResponse newsResponse = gson.fromJson(gsonResponse, NewsResponse.class);
-        //List<NewsDTO> newsdto = response.getData();
-
         List<NewsDTO> listdto = response.getData();
         NewsEntity[] news = new NewsEntity[listdto.size()];
         int i = 0;
@@ -304,7 +296,6 @@ public class NewsListFragment extends Fragment {
             news[i] = nn;
             i++;
         }
-        saveNews(news);
         return news;
     }
 
