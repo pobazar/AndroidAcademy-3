@@ -16,13 +16,13 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.androidacademy2.AboutActivity;
+
 import com.example.androidacademy2.AppDatabase;
 import com.example.androidacademy2.DB.NewsEntity;
 import com.example.androidacademy2.DTO.MultimediaDTO;
 import com.example.androidacademy2.DTO.NewsDTO;
 import com.example.androidacademy2.DTO.NewsResponse;
-import com.example.androidacademy2.DownloadService;
+
 import com.example.androidacademy2.MainActivity;
 import com.example.androidacademy2.Net.Network;
 import com.example.androidacademy2.R;

@@ -1,4 +1,4 @@
-package com.example.androidacademy2;
+package com.example.androidacademy2.Service;
 
 
 import android.app.Notification;
@@ -12,14 +12,15 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
 
+import com.example.androidacademy2.AppDatabase;
 import com.example.androidacademy2.DB.NewsEntity;
 import com.example.androidacademy2.DTO.MultimediaDTO;
 import com.example.androidacademy2.DTO.NewsDTO;
 import com.example.androidacademy2.DTO.NewsResponse;
+import com.example.androidacademy2.MainActivity;
 import com.example.androidacademy2.Net.Network;
-import com.example.androidacademy2.news.NewsListFragment;
+import com.example.androidacademy2.R;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -48,6 +49,7 @@ public class DownloadService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d(LOG, "Service create");
         //Создание интента
         Intent resultIntent = new Intent(this, MainActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
@@ -69,7 +71,7 @@ public class DownloadService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
+        Log.d(LOG, "Service onStart");
         if (MainActivity.category == null) {
             category = "food";
         } else {
@@ -91,6 +93,7 @@ public class DownloadService extends Service {
 
     @Override
     public void onDestroy() {
+        Log.d(LOG, "Service destroy");
         if (downloadDisposable != null && !downloadDisposable.isDisposed()) {
             downloadDisposable.dispose();
         }
@@ -130,11 +133,6 @@ public class DownloadService extends Service {
     }
 
     private void completeLoad(NewsEntity[] newsEntities) {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         Log.d(LOG, "download " + newsEntities.length + " news in service");
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(ID2, showNotification(getString(R.string.download_complete)));
@@ -142,11 +140,6 @@ public class DownloadService extends Service {
     }
 
     private void failedLoad(Throwable th) {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         Log.d(LOG, "download news failed in service: " + th);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(ID2, showNotification(getString(R.string.download_failed)));

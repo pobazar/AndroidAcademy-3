@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 
+import com.example.androidacademy2.Service.NetworkUtils;
+import com.example.androidacademy2.Service.UploadWork;
+
 import java.util.concurrent.TimeUnit;
 
 import androidx.work.Constraints;
