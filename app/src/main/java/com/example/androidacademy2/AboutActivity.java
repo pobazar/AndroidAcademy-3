@@ -1,4 +1,4 @@
-package com.example.androidacademy2.About;
+package com.example.androidacademy2;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -6,26 +6,25 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.arellomobile.mvp.MvpAppCompatActivity;
-import com.example.androidacademy2.MainActivity;
-import com.example.androidacademy2.R;
-import com.example.androidacademy2.news.NewsListFragment;
+
+
+import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 
-public class AboutActivity extends AppCompatActivity implements AboutView {
+
+public class AboutActivity extends MvpAppCompatActivity implements AboutView {
+    @InjectPresenter
+    AboutPresenter aboutPresenter;
 
     private static final int LAYOUT = R.layout.about_activity;
-    private AboutPresenter aboutPresenter;
     private TextView editMes, butMes, title1, title2, title3, description;
     private ImageButton imb1, imb2;
     private ImageView photo, imageTitle1, imageTitle2, imageTitle3;
@@ -41,20 +40,16 @@ public class AboutActivity extends AppCompatActivity implements AboutView {
         super.onCreate(savedInstanceState);
         setContentView(LAYOUT);
         initViews();
-        aboutPresenter = new AboutPresenter();
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        aboutPresenter.onAttach(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        aboutPresenter.onDetach();
     }
 
     @Override
@@ -76,11 +71,10 @@ public class AboutActivity extends AppCompatActivity implements AboutView {
         }
     }
 
-    public void openEmailActivity() {
-        message = editMes.getText().toString();
+    public void openEmailActivity(String email, String message) {
 
         Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse(getString(R.string.email_adr, addresses)));
+        intent.setData(Uri.parse(getString(R.string.email_adr, email)));
 
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
         intent.putExtra(Intent.EXTRA_TEXT, message);
@@ -116,17 +110,18 @@ public class AboutActivity extends AppCompatActivity implements AboutView {
         imageTitle3 = findViewById(R.id.imageTitle3);
         butMes.setOnClickListener(v -> {
             Log.d(LOG, "Try open second activity");
-            openEmailActivity();
+            message = editMes.getText().toString();
+            aboutPresenter.openEmailActivity(addresses,message);
         });
 
         imb1.setOnClickListener(v -> {
             Log.d(LOG, "Try open vk");
-            openBrowserActivity(vks);
+            aboutPresenter.openBrowserActivity(vks);
         });
 
         imb2.setOnClickListener(v -> {
             Log.d(LOG, "Try open telegram");
-            openBrowserActivity(teleg);
+            aboutPresenter.openBrowserActivity(teleg);
         });
     }
 

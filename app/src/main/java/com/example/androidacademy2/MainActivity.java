@@ -16,7 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.androidacademy2.About.AboutActivity;
+
 import com.example.androidacademy2.news.NewsDetailsEditFragment;
 import com.example.androidacademy2.news.NewsDetailsFragment;
 import com.example.androidacademy2.news.NewsFragmentListener;

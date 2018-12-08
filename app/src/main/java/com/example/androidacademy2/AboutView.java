@@ -1,6 +1,8 @@
-package com.example.androidacademy2.About;
+package com.example.androidacademy2;
 
 import com.arellomobile.mvp.MvpView;
+import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
+import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +19,8 @@ public interface AboutView extends MvpView {
 
     void setupDescription(@NonNull String description);
 
+    @StateStrategyType(SkipStrategy.class)
     void openBrowserActivity(@NonNull String url);
-    void openEmailActivity();
+    @StateStrategyType(SkipStrategy.class)
+    void openEmailActivity(@NonNull String mail, @NonNull String message);
 }
