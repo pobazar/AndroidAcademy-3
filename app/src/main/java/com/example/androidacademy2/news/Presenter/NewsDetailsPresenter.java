@@ -76,7 +76,7 @@ public class NewsDetailsPresenter extends MvpPresenter<NewsDetailsView> {
     @Override
     public void detachView(NewsDetailsView view) {
         super.detachView(view);
-         // compositeDisposable.dispose();
+        // compositeDisposable.dispose();
     }
 
     private void setupDate(@NonNull String date) {

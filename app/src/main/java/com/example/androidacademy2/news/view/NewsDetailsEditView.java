@@ -7,8 +7,10 @@ import androidx.annotation.Nullable;
 
 public interface NewsDetailsEditView extends MvpView {
     void setupDate(@NonNull String date);
-    void setupTitle(@NonNull  String text);
-    void setupFull(@NonNull  String text);
+
+    void setupTitle(@NonNull String text);
+
+    void setupFull(@NonNull String text);
 
     void setupPhoto(@Nullable String photoUrl);
 
