@@ -1,18 +1,14 @@
 package com.example.androidacademy2.news.Presenter;
 
-import android.content.Context;
-import android.content.res.Configuration;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
-import com.bumptech.glide.Glide;
-import com.example.androidacademy2.AppDatabase;
 import com.example.androidacademy2.DB.NewsEntity;
 import com.example.androidacademy2.MainActivity;
+import com.example.androidacademy2.news.view.NewsDetailsEditView;
 import com.example.androidacademy2.news.view.NewsDetailsView;
-
 
 import java.util.concurrent.Callable;
 
@@ -25,20 +21,20 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 @InjectViewState
-public class NewsDetailsPresenter extends MvpPresenter<NewsDetailsView> {
-    private NewsDetailsView view;
-    private NewsEntity news;
+public class NewsDetailsEditPresenter extends MvpPresenter<NewsDetailsEditView> {
+    private NewsDetailsEditView view;
     private String url;
+    private NewsEntity news;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private static final String LOG = "My_Log";
 
     @ProvidePresenter
-    NewsDetailsPresenter provideNewsDetailsPresenter() {
-        return new NewsDetailsPresenter();
+    NewsDetailsEditPresenter provideNewsDetailsEditPresenter() {
+        return new NewsDetailsEditPresenter();
     }
 
     @Override
-    public void attachView(NewsDetailsView view) {
+    public void attachView(NewsDetailsEditView view) {
         super.attachView(view);
         this.view = view;
         if (compositeDisposable.isDisposed()) {
@@ -55,6 +51,9 @@ public class NewsDetailsPresenter extends MvpPresenter<NewsDetailsView> {
                 .subscribe(this::ShowNews, this::logError);
         compositeDisposable.add(disposable2);
     }
+    private void logError(Throwable th) {
+        Log.d(LOG, "" + th);
+    }
 
     private void ShowNews(NewsEntity news) {
         this.news = news;
@@ -64,19 +63,15 @@ public class NewsDetailsPresenter extends MvpPresenter<NewsDetailsView> {
         setupPhoto(news.getImageUrl());
     }
 
-    private void logError(Throwable th) {
-        Log.d(LOG, "" + th);
-    }
-
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
     }
 
     @Override
-    public void detachView(NewsDetailsView view) {
+    public void detachView(NewsDetailsEditView view) {
         super.detachView(view);
-         // compositeDisposable.dispose();
+        // compositeDisposable.dispose();
     }
 
     private void setupDate(@NonNull String date) {
@@ -95,23 +90,19 @@ public class NewsDetailsPresenter extends MvpPresenter<NewsDetailsView> {
         view.setupPhoto(photoUrl);
     }
 
-    public void editNews(String url) {
-        view.editNews(url);
-    }
-
-    public void deleteNews(String url) {
-        Disposable disposable1 = deleteNews()
+    public void saveNews(String url, String title, String full, String date) {
+        final Disposable Disposable3 = save(url, title, full, date)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
-        compositeDisposable.add(disposable1);
-        view.deleteNews();
+        compositeDisposable.add(Disposable3);
+        view.saveNews();
     }
 
-    private Completable deleteNews() {
+    private Completable save(String url, String title, String full, String date) {
         return Completable.fromCallable((Callable<Void>) () -> {
-            MainActivity.db.newsDao().deleteById(url);
-            Log.d(LOG, "1 news delete");
+            MainActivity.db.newsDao().updateById(url, title, full, date);
+            Log.d(LOG, "rows update");
             return null;
         });
     }

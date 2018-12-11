@@ -41,18 +41,16 @@ public class NewsDetailsFragment extends MvpAppCompatFragment implements NewsDet
     NewsDetailsPresenter presenter;
     private static final int LAYOUT = R.layout.activity_news_details;
 
-    static public String url;
+    static private String url;
     WebView webView;
     private ImageView image;
     private TextView titleText, fullText, publisheDate;
     private Button butEdit;
     private Button butDel;
-    View view;
+    private View view;
 
     private static final String LOG = "My_Log";
     private static final String ARGS_URL = "url";
-    private AppDatabase db;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private Context context;
     private NewsFragmentListener listener;
 
@@ -76,7 +74,7 @@ public class NewsDetailsFragment extends MvpAppCompatFragment implements NewsDet
 
     @Override
     public void onDetach() {
-        // listener = null;
+         listener = null;
         super.onDetach();
     }
 
@@ -91,27 +89,7 @@ public class NewsDetailsFragment extends MvpAppCompatFragment implements NewsDet
         }
         Log.d(LOG, url);
 
-     //   db = AppDatabase.getAppDatabase(context);
         initViews();
-
-
-        /*butEdit.setOnClickListener(v -> {
-            listener.onNewsEditClicked(url);
-        });*/
-
-
-     /*   butDel.setOnClickListener(v -> {
-
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                getFragmentManager().popBackStack();
-            } else {
-                listener.deleteFragmentDetails();
-            }
-        });*/
-        /*webView = findViewById (R.id.web_news);
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webView.loadUrl(url);*/
         MainActivity.f = 1;
         return view;
     }
@@ -120,45 +98,16 @@ public class NewsDetailsFragment extends MvpAppCompatFragment implements NewsDet
     public void onStart() {
         super.onStart();
         presenter.setNews(url);
-      /*  if (compositeDisposable.isDisposed()) {
-            compositeDisposable = new CompositeDisposable();
-        }
-        Disposable disposable2 = db.newsDao().findById(url)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::showNewsDetails, this::logError);
-        compositeDisposable.add(disposable2);*/
     }
 
-   /* private void showNewsDetails(NewsEntity news) {
-
-
-        titleText.setText(news.getTitle());
-        fullText.setText(news.getPreviewText());
-        publisheDate.setText(news.getPublishDate());
-        Glide.with(context).load(news.getImageUrl()).into(image);
-        //setTitle(news.getCategory());
-    }*/
-
-    /*private void logError(Throwable th) {
-        Log.d(LOG, "" + th);
-    }*/
 
     @Override
     public void onStop() {
         super.onStop();
-        // compositeDisposable.dispose();
     }
 
-   /* public Completable deleteNews() {
-        return Completable.fromCallable((Callable<Void>) () -> {
-            db.newsDao().deleteById(url);
-            Log.d(LOG, "1 news delete");
-            return null;
-        });
-    }*/
 
-    public void initViews() {
+    private void initViews() {
         titleText = view.findViewById(R.id.title_news_details);
         fullText = view.findViewById(R.id.full_news_details);
         publisheDate = view.findViewById(R.id.date_news_details);

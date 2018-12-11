@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.example.androidacademy2.R;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
