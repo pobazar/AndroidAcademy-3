@@ -30,9 +30,9 @@
             android:name=".MainActivity">
         </activity>
         <service
-            android:name=".DownloadService"
+            android:name=".Service.DownloadService"
             android:exported="false"/>
-        <receiver android:name=".NetworkUtils$NetworkReceiver">
+        <receiver android:name=".Service.NetworkUtils$NetworkReceiver">
             <intent-filter>
                 <action android:name=".android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>

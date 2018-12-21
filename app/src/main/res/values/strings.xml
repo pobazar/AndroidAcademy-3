@@ -30,4 +30,5 @@
     <string name="download_complete">Download news complete</string>
     <string name="download_failed">Download news failed</string>
     <string name="download_progress">News are loaded</string>
+    <string name="no_information">No information</string>
 </resources>

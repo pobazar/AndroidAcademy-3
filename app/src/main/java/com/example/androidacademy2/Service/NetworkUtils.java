@@ -1,10 +1,12 @@
-package com.example.androidacademy2;
+package com.example.androidacademy2.Service;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+
+import com.example.androidacademy2.MyApplication;
 
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;

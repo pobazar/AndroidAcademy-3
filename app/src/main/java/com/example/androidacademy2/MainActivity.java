@@ -1,5 +1,6 @@
 package com.example.androidacademy2;
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import io.reactivex.Completable;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
 
 import com.example.androidacademy2.news.NewsDetailsEditFragment;
 import com.example.androidacademy2.news.NewsDetailsFragment;
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements NewsFragmentListe
     private static final String tag3 = "tag3";
     private static final String LOG = "My_Log";
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private AppDatabase db;
+    static public AppDatabase db;
     public static int f = 0;
     public static String url = "";
     public static boolean isTwoPanel;
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements NewsFragmentListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        db = AppDatabase.getAppDatabase(this);
       /*  db = AppDatabase.getAppDatabase(this);
         final Disposable Disposable1 = deleteNews()
                 .subscribeOn(Schedulers.computation())
