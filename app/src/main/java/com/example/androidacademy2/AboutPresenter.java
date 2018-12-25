@@ -33,7 +33,7 @@ public class AboutPresenter extends MvpPresenter<AboutView> {
         setupTitle1("Student of Android Academy");
         setupTitle2("Student of MPEI");
         setupTitle3("Cat\'s paw");
-        setupPhoto(R.drawable.avatarka);
+       // setupPhoto(R.drawable.avatar);
         setupImageTitle1(R.drawable.baseline_android_black_18dp);
         setupImageTitle2(R.drawable.baseline_school_black_18dp);
         setupImageTitle3(R.drawable.baseline_pets_black_18dp);

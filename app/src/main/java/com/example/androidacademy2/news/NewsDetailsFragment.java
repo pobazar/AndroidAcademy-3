@@ -53,6 +53,7 @@ public class NewsDetailsFragment extends MvpAppCompatFragment implements NewsDet
     private static final String ARGS_URL = "url";
     private Context context;
     private NewsFragmentListener listener;
+    private boolean isTwoPanel;
 
 
     static public NewsDetailsFragment newInstance(String url) {
@@ -98,6 +99,7 @@ public class NewsDetailsFragment extends MvpAppCompatFragment implements NewsDet
     public void onStart() {
         super.onStart();
         presenter.setNews(url);
+        isTwoPanel = getResources().getBoolean(R.bool.is_tablet);
     }
 
 
@@ -143,10 +145,16 @@ public class NewsDetailsFragment extends MvpAppCompatFragment implements NewsDet
     }
 
     public void deleteNews() {
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            getFragmentManager().popBackStack();
+        if (isTwoPanel) {
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                getFragmentManager().popBackStack();
+            }
+            else
+            {
+                listener.deleteFragmentDetails();
+            }
         } else {
-            listener.deleteFragmentDetails();
+            getFragmentManager().popBackStack();
         }
     }
 

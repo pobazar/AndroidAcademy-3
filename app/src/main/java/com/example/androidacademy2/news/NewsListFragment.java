@@ -118,61 +118,6 @@ public class NewsListFragment extends MvpAppCompatFragment implements NewsListVi
         Log.d(LOG, "Application start");
     }
 
-
-   /* private void loadItems() {
-        Log.d(LOG, "start rx load news");
-        visibleProgress();
-        final  Disposable downloadDisposable = Network.getInstance()
-                .news()
-                .search(MainActivity.category)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation())
-                .map(this::dtoResponseToDao)
-                .doOnSuccess(this::saveNews)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::completeLoad, this::visibleError);
-        compositeDisposable.add(downloadDisposable);
-    }*/
-
- /*   private void updateNews() {
-        final Disposable newsRoomDisposable = getNews()
-                .map(this::daoToNews)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::showNews, this::visibleError);
-        compositeDisposable.add(newsRoomDisposable);
-    }*/
-
-
-   /* private void saveNews(NewsEntity[] newsEntities) {
-        db.newsDao().deleteAll();
-        db.newsDao().insertAll(newsEntities);
-        Log.d(LOG, "save " + newsEntities.length + " news to DB");
-    }*/
-
-  /*  private Observable<List<NewsEntity>> getNews() {
-
-        db = AppDatabase.getAppDatabase(context);
-        return db.newsDao().getAll();
-    }
-
-    public Observable<List<NewsEntity>> getNews(String cat) {
-        db = AppDatabase.getAppDatabase(context);
-        return db.newsDao().loadAllByCategory(cat);
-    }
-
-    private Completable deleteNews() {
-        return Completable.fromCallable((Callable<Void>) () -> {
-            db.newsDao().deleteAll();
-            Log.d(LOG, "rows delete");
-            return null;
-        });
-    }*/
-
-   /* private void completeLoad(NewsEntity[] newsEntities) {
-        Log.d(LOG, "download " + newsEntities.length + " news");
-    }*/
-
     @Override
     public void onStop() {
         super.onStop();
@@ -180,44 +125,6 @@ public class NewsListFragment extends MvpAppCompatFragment implements NewsListVi
         //  compositeDisposable.dispose();
     }
 
-
-
-   /* private NewsEntity[] dtoResponseToDao(@NonNull NewsResponse response) {
-        List<NewsDTO> listdto = response.getData();
-        NewsEntity[] news = new NewsEntity[listdto.size()];
-        int i = 0;
-        for (NewsDTO x : listdto) {
-            NewsEntity nn = new NewsEntity();
-            String image = "";
-            for (MultimediaDTO y : x.getMultimedia()) {
-                if (y.getFormat().equals("Standard Thumbnail")) {
-                    image = y.getUrl();
-                    break;
-                }
-            }
-            nn.setCategory(x.getSection());
-            nn.setFullText("");
-            nn.setImageUrl(image);
-            nn.setPreviewText(x.getAbstract1());
-            nn.setPublishDate(x.getPublishedDate().replace('T', ' '));
-            nn.setTitle(x.getTitle());
-            nn.setUrl(x.getUrl());
-            news[i] = nn;
-            i++;
-        }
-        return news;
-    }*/
-
-    /*private List<NewsItem> daoToNews(List<NewsEntity> newsEntities) {
-        Log.d(LOG, "get " + newsEntities.size() + " news");
-        List<NewsItem> news = new ArrayList<>();
-        for (NewsEntity x : newsEntities) {
-            news.add(new NewsItem(x.getTitle(), x.getImageUrl(), x.getCategory(), x.getPublishDate(), x.getPreviewText(), x.getFullText(), x.getUrl()));
-        }
-        return news;
-    }*/
-
-    //----------------------------------------------------------------------------------------------------
     private int checkitem(String s) {
         int i = 0;
         for (String x : categories) {
@@ -238,9 +145,6 @@ public class NewsListFragment extends MvpAppCompatFragment implements NewsListVi
 
         tryButton.setOnClickListener(v -> {
             Log.d(LOG, "Try connect");
-            // visibleProgress();
-            //  loadItems();
-
             presenter.loadItems();
         });
 
@@ -255,9 +159,6 @@ public class NewsListFragment extends MvpAppCompatFragment implements NewsListVi
                                 categoryButton.setText(MainActivity.category);
                                 dialog.cancel();
                                 Log.d(LOG, "Change category");
-                                //visibleProgress();
-                                //loadItems();
-
                                 presenter.loadItems();
 
                             });
@@ -267,7 +168,6 @@ public class NewsListFragment extends MvpAppCompatFragment implements NewsListVi
 
         loadButton.setOnClickListener(v -> {
             Log.d(LOG, "float button onclick");
-            //  loadItems();
             presenter.loadItems();
         });
     }
