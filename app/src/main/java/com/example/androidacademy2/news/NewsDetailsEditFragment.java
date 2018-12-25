@@ -14,30 +14,20 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
+
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.bumptech.glide.Glide;
-import com.example.androidacademy2.AppDatabase;
-import com.example.androidacademy2.DB.NewsEntity;
+
 import com.example.androidacademy2.MainActivity;
 import com.example.androidacademy2.MvpAppCompatFragment;
 import com.example.androidacademy2.R;
 import com.example.androidacademy2.news.Presenter.NewsDetailsEditPresenter;
-import com.example.androidacademy2.news.Presenter.NewsDetailsPresenter;
 import com.example.androidacademy2.news.view.NewsDetailsEditView;
 
-import java.util.concurrent.Callable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import io.reactivex.Completable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class NewsDetailsEditFragment extends MvpAppCompatFragment implements NewsDetailsEditView {
     @InjectPresenter
@@ -54,6 +44,7 @@ public class NewsDetailsEditFragment extends MvpAppCompatFragment implements New
     private Context context;
     private NewsFragmentListener listener;
     private View view;
+    private boolean isTwoPanel;
 
     static public NewsDetailsEditFragment newInstance(String url) {
         NewsDetailsEditFragment pageFragment = new NewsDetailsEditFragment();
@@ -98,6 +89,7 @@ public class NewsDetailsEditFragment extends MvpAppCompatFragment implements New
     public void onStart() {
         super.onStart();
         presenter.setNews(url);
+        isTwoPanel = getResources().getBoolean(R.bool.is_tablet);
     }
 
     @Override
@@ -139,10 +131,16 @@ public class NewsDetailsEditFragment extends MvpAppCompatFragment implements New
     }
 
     public void saveNews() {
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            getFragmentManager().popBackStack();
+        if (isTwoPanel) {
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                getFragmentManager().popBackStack();
+            }
+            else
+            {
+                listener.deleteFragmentEdit();
+            }
         } else {
-            listener.deleteFragmentDetails();
+            getFragmentManager().popBackStack();
         }
     }
 

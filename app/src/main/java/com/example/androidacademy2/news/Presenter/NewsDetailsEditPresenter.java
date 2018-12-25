@@ -5,6 +5,8 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
+import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.example.androidacademy2.DB.NewsEntity;
 import com.example.androidacademy2.MainActivity;
 import com.example.androidacademy2.news.view.NewsDetailsEditView;
@@ -42,6 +44,7 @@ public class NewsDetailsEditPresenter extends MvpPresenter<NewsDetailsEditView> 
         }
     }
 
+    @StateStrategyType(SkipStrategy.class)
     public void setNews(@NonNull String url) {
         this.url = url;
 
@@ -55,6 +58,7 @@ public class NewsDetailsEditPresenter extends MvpPresenter<NewsDetailsEditView> 
         Log.d(LOG, "" + th);
     }
 
+    @StateStrategyType(SkipStrategy.class)
     private void ShowNews(NewsEntity news) {
         this.news = news;
         setupDate(news.getPublishDate());

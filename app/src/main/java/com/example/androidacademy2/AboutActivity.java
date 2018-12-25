@@ -1,6 +1,7 @@
 package com.example.androidacademy2;
 
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;

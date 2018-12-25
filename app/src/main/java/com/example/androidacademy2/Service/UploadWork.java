@@ -11,13 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import static androidx.work.ListenableWorker.Result.SUCCESS;
-
 
 public class UploadWork extends Worker {
     private static final String LOG = "My_Log";
 
-    Context context;
+    private Context context;
 
     public UploadWork(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -36,8 +34,7 @@ public class UploadWork extends Worker {
         } else {
             context.startService(intent);
         }
-        return Result.SUCCESS; // FAILURE,
-        //	RETRY
+        return Result.success();
     }
 
 }
